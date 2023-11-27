@@ -14,6 +14,7 @@ class Mighty extends Phaser.Physics.Arcade.Sprite {
         this.speed = 100;
         this.hurtTimer = 1000; //In ms
         this.setGravityY(300); //Applying gravity
+        this.body.setSize(this.width / 1.5, this.height / 1.8);
 
         //Initializing state machine to handle Mighty
         scene.mightyFSM = new StateMachine("idle", {
@@ -33,9 +34,9 @@ class IdleState extends State {
     }
 
     execute(scene, mighty) {
-        const {left, right, space, r} = scene.keys;
+        const {left, right, space} = scene.keys;
         const keyH = scene.keys.keyH; //Initializing H key for TESTING
-        const keySPACE = scene.keys.keySPACE; //Bounding to enable SPACE key
+        //const keySPACE = scene.keys.keySPACE; //Bounding to enable SPACE key
         const keyR = scene.keys.keyR; //Bounding to enable R key
 
         //Transition to jump if space is pressed
@@ -44,40 +45,40 @@ class IdleState extends State {
             return;
         }
 
-        // //Transition to attack if r is pressed
-        // if(Phaser.Input.Keyboard.JustDown(r)){
-        //     this.stateMachine.transition("attack");
-        //     return;
-        // }
-
-        // //Transition to hurt if h is pressed for TESTING
-        // if(Phaser.Input.Keyboard.JustDown(h)){
-        //     this.stateMachine.transition("hurt");
-        //     return;
-        // }
-
-        // //Transition to run if left or right is pressed
-        // if(left.isDown || right.isDown){
-        //     this.stateMachine.transition("run");
-        //     return;
-        // }
-    }
-}
-
-class RunState extends State {
-    execute(scene, mighty){
-        const { left, right, r } = scene.keys;
-        const HKey = scene.keys.HKey; //Initializing H key for TESTING
-        const keyR = scene.keys.keyR; //Bounding to enable R key
-
         //Transition to attack if r is pressed
-        if(Phaser.Input.Keyboard.JustDown(r)){
+        if(Phaser.Input.Keyboard.JustDown(keyR)){
             this.stateMachine.transition("attack");
             return;
         }
 
         //Transition to hurt if h is pressed for TESTING
-        if(Phaser.Input.Keyboard.JustDown(h)){
+        if(Phaser.Input.Keyboard.JustDown(keyH)){
+            this.stateMachine.transition("hurt");
+            return;
+        }
+
+        //Transition to run if left or right is pressed
+        if(left.isDown || right.isDown){
+            this.stateMachine.transition("run");
+            return;
+        }
+    }
+}
+
+class RunState extends State {
+    execute(scene, mighty){
+        const { left, right} = scene.keys;
+        const keyH = scene.keys.keyH; //Initializing H key for TESTING
+        const keyR = scene.keys.keyR; //Bounding to enable R key
+
+        //Transition to attack if r is pressed
+        if(Phaser.Input.Keyboard.JustDown(keyR)){
+            this.stateMachine.transition("attack");
+            return;
+        }
+
+        //Transition to hurt if h is pressed for TESTING
+        if(Phaser.Input.Keyboard.JustDown(keyH)){
             this.stateMachine.transition("hurt");
             return;
         }
@@ -88,13 +89,16 @@ class RunState extends State {
             return;
         }
 
+        //NEED TO ADD JUMP FEATURE!!!
+
         //Executing Movement
         if(left.isDown) {
             mighty.direction = "left";
+            mighty.setVelocityX(-300);
         } else if(right.isDown) {
             mighty.direction = "right";
+            mighty.setVelocityX(300);
         }
-        mighty.setVelocity(100);
         mighty.anims.play(`run-${mighty.direction}`, true);
     }
 }

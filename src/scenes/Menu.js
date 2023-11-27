@@ -74,6 +74,8 @@ class Menu extends Phaser.Scene {
     }
 
     update(){
+        this.scene.start("playScene") //FOR TESTING
+
         if(this.playerChoice == "play"){
             if(Phaser.Input.Keyboard.JustDown(keyDOWN)){
                 this.playerChoice = "credits";
