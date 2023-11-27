@@ -5,17 +5,18 @@ class Mighty extends Phaser.Physics.Arcade.Sprite {
         scene.add.existing(this); //Adding Mighty to the scene
         scene.physics.add.existing(this); //Adding physics to Mighty in this scene
 
-        this.body.setSize(this.width / 2, this.height / 2) //Adjusting Mighty's size
-        this.body.setCollideWorldBounds(true) //Enabling collision with world bounds
+        //this.body.setSize(this.width / 2, this.height / 2) //Adjusting Mighty's size
+        this.setCollideWorldBounds(true) //Enabling collision with world bounds
+        this.setImmovable(true);
 
         //Mighty's properties
         this.direction = direction;
         this.speed = 100;
         this.hurtTimer = 1000; //In ms
-        this.setGravityY(100); //Applying gravity
+        this.setGravityY(300); //Applying gravity
 
         //Initializing state machine to handle Mighty
-        scene.mightyFSM = new StateMachine("idle-right", {
+        scene.mightyFSM = new StateMachine("idle", {
             idle: new IdleState(),
             run: new RunState(),
             jump: new JumpState(),
@@ -43,23 +44,23 @@ class IdleState extends State {
             return;
         }
 
-        //Transition to attack if r is pressed
-        if(Phaser.Input.Keyboard.JustDown(r)){
-            this.stateMachine.transition("attack");
-            return;
-        }
+        // //Transition to attack if r is pressed
+        // if(Phaser.Input.Keyboard.JustDown(r)){
+        //     this.stateMachine.transition("attack");
+        //     return;
+        // }
 
-        //Transition to hurt if h is pressed for TESTING
-        if(Phaser.Input.Keyboard.JustDown(h)){
-            this.stateMachine.transition("hurt");
-            return;
-        }
+        // //Transition to hurt if h is pressed for TESTING
+        // if(Phaser.Input.Keyboard.JustDown(h)){
+        //     this.stateMachine.transition("hurt");
+        //     return;
+        // }
 
-        //Transition to run if left or right is pressed
-        if(left.isDown || right.isDown){
-            this.stateMachine.transition("run");
-            return;
-        }
+        // //Transition to run if left or right is pressed
+        // if(left.isDown || right.isDown){
+        //     this.stateMachine.transition("run");
+        //     return;
+        // }
     }
 }
 

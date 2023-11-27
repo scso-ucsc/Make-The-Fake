@@ -16,11 +16,32 @@ class Load extends Phaser.Scene {
             loadingBar.destroy();
         });
 
-        //Loading Assets
+        //Loading Sprites
+        this.load.image("menuBackground", "./assets/menuBackground.jpg");
+        this.load.image("menuTitle", "./assets/menuTitle.png");
+        this.load.image("gummy", "./assets/gummy.png");
+
+        //Loading Spritesheet Assets
         this.load.spritesheet("mighty", "./assets/mighty.png", { //Loading Mighty Spritesheet
             frameWidth: 100,
             frameHeight: 100
         });
+        this.load.spritesheet("bugsterOrange", "./assets/bugsterOrange.png", { //Loading Bugster Spritesheets
+            frameWidth: 100,
+            frameHeight: 100
+        });
+        this.load.spritesheet("bugsterGreen", "./assets/bugsterGreen.png", {
+            frameWidth: 100,
+            frameHeight: 100
+        });
+        this.load.spritesheet("bugsterYellow", "./assets/bugsterYellow.png", {
+            frameWidth: 100,
+            frameHeight: 100
+        });
+        this.load.spritesheet("box", "./assets/box.png", { //Loading breakable box
+            frameWidth: 100,
+            frameHeight: 100
+        })
     }
 
     create(){
@@ -94,6 +115,45 @@ class Load extends Phaser.Scene {
             frames: this.anims.generateFrameNumbers("mighty", {start: 23, end: 24})
         });
 
+        //Creating Bugster Animations
+        this.anims.create({
+            key: "orangeBugster-left",
+            frameRate: 8,
+            repeat: -1,
+            frames: this.anims.generateFrameNumbers("bugsterOrange", {start: 0, end: 5})
+        });
+        this.anims.create({
+            key: "orangeBugster-right",
+            frameRate: 8,
+            repeat: -1,
+            frames: this.anims.generateFrameNumbers("bugsterOrange", {start: 6, end: 11})
+        });
+        this.anims.create({
+            key: "yellowBugster-left",
+            frameRate: 8,
+            repeat: -1,
+            frames: this.anims.generateFrameNumbers("bugsterYellow", {start: 0, end: 5})
+        });
+        this.anims.create({
+            key: "yellowBugster-right",
+            frameRate: 8,
+            repeat: -1,
+            frames: this.anims.generateFrameNumbers("bugsterYellow", {start: 6, end: 11})
+        });
+        this.anims.create({
+            key: "greenBugster-fly",
+            frameRate: 8,
+            repeat: -1,
+            frames: this.anims.generateFrameNumbers("bugsterGreen", {start: 0, end: 2})
+        });
+
+        //Creating asset animations
+        this.anims.create({
+            key: "box-break",
+            frameRate: 8,
+            repeat: 0,
+            frames: this.anims.generateFrameNumbers("box", {start: 1, end: 5})
+        })
 
         this.scene.start("menuScene");
     }
