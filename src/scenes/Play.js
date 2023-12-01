@@ -4,6 +4,9 @@ class Play extends Phaser.Scene {
     }
 
     create(){
+        //Initializing Variables
+        this.gummyCount = 0;
+
         //Adding Background
         this.background = this.add.tileSprite(0, 0, 1800, 900, "playBackground").setOrigin(0, 0);
         //Adding TileMap
@@ -19,17 +22,25 @@ class Play extends Phaser.Scene {
         });
         //COLLISION ONLY SEEMS TO WORK FROM TOP
 
+        //Creating Groups
+        this.gummyGroup = this.add.group(); //HOW TO SPAWN MULTIPLE GUMMIES BASED ON POINTS
+
         //Adding Assets
         this.add.text(0, 0, "playScene");
         this.mighty = new Mighty(this, 50, 50, "mighty", 0, "right"); //Adding Mighty
         this.orange = new BugsterOrange(this, 400, 0, "bugsterOrange", 0, "left");
         this.yellow = new BugsterYellow(this, 450, 0, "bugsterYellow", 0, "left");
         this.green = new BugsterGreen(this, 500, 0, "bugsterGreen", 0, "down");
+        this.gummyTest = new Gummy(this, 350, 350, "gummy"); //FOR TESTING
+        this.gummyGroup.add(this.gummyTest);
 
         //Enabling Collision
         this.physics.add.collider(this.mighty, terrainLayer, () => { //Enabling collision between Mighty and terrainLayer & Lets Mighty know he is touching the ground
             this.mighty.isInAir = false;
         });
+        this.physics.add.collider(this.gummyGroup, this.mighty, (gummy) => {
+            gummy.absorb();
+        })
 
         //Camera manipulation
         this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels); //Setting camera bounds
