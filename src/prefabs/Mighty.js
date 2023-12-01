@@ -6,12 +6,12 @@ class Mighty extends Phaser.Physics.Arcade.Sprite {
         scene.physics.add.existing(this); //Adding physics to Mighty in this scene
 
         //this.body.setSize(this.width / 2, this.height / 2) //Adjusting Mighty's size
-        this.setCollideWorldBounds(true) //Enabling collision with world bounds
+        this.setCollideWorldBounds(true); //Enabling collision with world bounds
         this.setImmovable(true);
 
         //Mighty's properties
         this.direction = direction;
-        this.speed = 3;
+        this.speed = 300;
         this.gravity = 300
         this.hurtTimer = 1000; //In ms
         this.setGravityY(this.gravity); //Applying gravity
@@ -32,7 +32,7 @@ class Mighty extends Phaser.Physics.Arcade.Sprite {
 
 class IdleState extends State {
     enter(scene, mighty) {
-        //mighty.setVelocity(0);
+        mighty.setVelocityX(0); //Reset
         mighty.anims.play(`idle-${mighty.direction}`);
         mighty.isInAir = false;
     }
@@ -102,10 +102,10 @@ class RunState extends State {
         //Executing Movement
         if(left.isDown) {
             mighty.direction = "left";
-            mighty.x -= mighty.speed;
+            mighty.setVelocityX(-mighty.speed);
         } else if(right.isDown) {
             mighty.direction = "right";
-            mighty.x += mighty.speed;
+            mighty.setVelocityX(mighty.speed);
         }
         mighty.anims.play(`run-${mighty.direction}`, true);
     }
@@ -161,10 +161,10 @@ class JumpState extends State{
         //Executing Movement
         if(left.isDown) {
             mighty.direction = "left";
-            mighty.x -= mighty.speed;
+            mighty.setVelocityX(-mighty.speed);
         } else if(right.isDown) {
             mighty.direction = "right";
-            mighty.x += mighty.speed;
+            mighty.setVelocityX(mighty.speed);
         }
         mighty.anims.play(`jump-${mighty.direction}`, true);
 

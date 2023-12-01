@@ -8,7 +8,7 @@ class Play extends Phaser.Scene {
         this.gummyCount = 0;
 
         //Adding Background
-        this.background = this.add.tileSprite(0, 0, 1800, 900, "playBackground").setOrigin(0, 0);
+        this.background = this.add.tileSprite(0, 0, 11200, 900, "playBackground").setOrigin(0, 0);
         //Adding TileMap
         const map = this.add.tilemap("tilemapJSON");
         const tileset = map.addTilesetImage("tileset", "tilesetImage"); //Connecting image to the data; "tileset" was the original name of the file
@@ -20,24 +20,30 @@ class Play extends Phaser.Scene {
         terrainLayer.setCollisionByProperty({ //Acquiring properties of terrain layer
             collides: true //If collides is true on that tile, collide
         });
-        //COLLISION ONLY SEEMS TO WORK FROM TOP
+        // scaffoldingLayer.setCollisionByProperty({
+        //     collides: true
+        // });
 
         //Creating Groups
         this.gummyGroup = this.add.group(); //HOW TO SPAWN MULTIPLE GUMMIES BASED ON POINTS
 
-        //Adding Assets
+        //Adding Assets FOR TESTING
         this.add.text(0, 0, "playScene");
-        this.mighty = new Mighty(this, 50, 50, "mighty", 0, "right"); //Adding Mighty
         this.orange = new BugsterOrange(this, 400, 0, "bugsterOrange", 0, "left");
         this.yellow = new BugsterYellow(this, 450, 0, "bugsterYellow", 0, "left");
         this.green = new BugsterGreen(this, 500, 0, "bugsterGreen", 0, "down");
         this.gummyTest = new Gummy(this, 350, 350, "gummy"); //FOR TESTING
         this.gummyGroup.add(this.gummyTest);
 
+        //Adding Mighty
+        const mightySpawn = map.findObject("MightySpawn", obj => obj.name === "spawnpoint");
+        this.mighty = new Mighty(this, mightySpawn.x, mightySpawn.y, "mighty", 0, "right"); //Adding Mighty
+
         //Enabling Collision
         this.physics.add.collider(this.mighty, terrainLayer, () => { //Enabling collision between Mighty and terrainLayer & Lets Mighty know he is touching the ground
             this.mighty.isInAir = false;
         });
+        this.physics.add.collider(this.mighty, scaffoldingLayer);
         this.physics.add.collider(this.gummyGroup, this.mighty, (gummy) => {
             gummy.absorb();
         })
