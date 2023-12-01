@@ -168,7 +168,10 @@ class JumpState extends State{
         }
         mighty.anims.play(`jump-${mighty.direction}`, true);
 
-        //How to switch to fall upon reaching max height?
+        if(mighty.isInAir == false){
+            this.stateMachine.transition("idle");
+            return;
+        }
     }
 }
 
@@ -180,13 +183,6 @@ class FallState extends State{
     execute(scene, mighty){
         const { left, right } = scene.keys;
         const keyH = scene.keys.keyH; //Initializing H key for TESTING
-        const keyR = scene.keys.keyR; //Bounding to enable R key
-
-        if(Phaser.Input.Keyboard.JustDown(keyR)){
-            mighty.setVelocityY(0);
-            this.stateMachine.transition("attack");
-            return;
-        }
 
         if(Phaser.Input.Keyboard.JustDown(keyH)){
             mighty.setVelocityY(0);
@@ -204,7 +200,10 @@ class FallState extends State{
         }
         mighty.anims.play(`jump-${mighty.direction}`, true);
 
-        //How to figure out on collision with floor?
+        if(mighty.isInAir == false){
+            this.stateMachine.transition("idle");
+            return;
+        }
     }
 }
 

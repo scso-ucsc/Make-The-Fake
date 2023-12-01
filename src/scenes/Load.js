@@ -18,6 +18,7 @@ class Load extends Phaser.Scene {
 
         //Loading Sprites
         this.load.image("menuBackground", "./assets/menuBackground.jpg");
+        this.load.image("playBackground", "./assets/playBackground.jpg")
         this.load.image("menuTitle", "./assets/menuTitle.png");
         this.load.image("gummy", "./assets/gummy.png");
 
@@ -42,6 +43,10 @@ class Load extends Phaser.Scene {
             frameWidth: 100,
             frameHeight: 100
         })
+
+        //Loading TileMap
+        this.load.image("tilesetImage", "./assets/tileset.png"); //Loading tileset
+        this.load.tilemapTiledJSON("tilemapJSON", "./assets/overworld.json");
     }
 
     create(){
