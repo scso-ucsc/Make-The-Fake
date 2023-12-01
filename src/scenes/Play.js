@@ -20,6 +20,7 @@ class Play extends Phaser.Scene {
     update(){
         //Enabling Mighty's State Machine
         this.mightyFSM.step();
+        // this.greenBugsterFSM.step();
         this.orange.update();
         this.yellow.update();
     }
