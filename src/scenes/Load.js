@@ -21,6 +21,10 @@ class Load extends Phaser.Scene {
         this.load.image("playBackground", "./assets/playBackground.jpg")
         this.load.image("menuTitle", "./assets/menuTitle.png");
         this.load.image("gummy", "./assets/gummy.png");
+        this.load.spritesheet("tileset", "./assets/tileset.png", {
+            frameWidth: 100,
+            frameHeight: 100
+        });
 
         //Loading Spritesheet Assets
         this.load.spritesheet("mighty", "./assets/mighty.png", { //Loading Mighty Spritesheet
