@@ -15,6 +15,7 @@ class Play extends Phaser.Scene {
         const backgroundLayer = map.createLayer("Background", tileset, 0, 0);
         const terrainLayer = map.createLayer("Terrain", tileset, 0, 0);
         const scaffoldingLayer = map.createLayer("Scaffolding", tileset, 0, 0);
+        let gummyLayer = map.getObjectLayer("Gummies");
 
         //Enabling collisions based on tilemap
         terrainLayer.setCollisionByProperty({ //Acquiring properties of terrain layer
@@ -24,8 +25,14 @@ class Play extends Phaser.Scene {
         //     collides: true
         // });
 
-        //Creating Groups
-        this.gummyGroup = this.add.group(); //HOW TO SPAWN MULTIPLE GUMMIES BASED ON POINTS
+        //Creating Gummy Group
+        this.gummyGroup = this.physics.add.group();
+        gummyLayer.objects.forEach((gummy) => {
+            const frameProperties = gummy.properties.find((prop) => prop.name === "frame"); //ERROR FOUND HERE!!!!
+            const frame = frameProperties.value;
+            let newGummy = new Gummy(this, gummy.x, gummy.y, "gummy").setOrigin(0);
+            this.gummyGroup.add(newGummy);
+        })
 
         //Adding Assets FOR TESTING
         this.add.text(0, 0, "playScene");
@@ -43,7 +50,7 @@ class Play extends Phaser.Scene {
         this.physics.add.collider(this.mighty, terrainLayer, () => { //Enabling collision between Mighty and terrainLayer & Lets Mighty know he is touching the ground
             this.mighty.isInAir = false;
         });
-        this.physics.add.collider(this.mighty, scaffoldingLayer);
+        //this.physics.add.collider(this.mighty, scaffoldingLayer);
         this.physics.add.collider(this.gummyGroup, this.mighty, (gummy) => {
             gummy.absorb();
         })
