@@ -113,8 +113,7 @@ class RunState extends State {
 
 class AttackState extends State{
     enter(scene, mighty){
-        mighty.setVelocity(0);
-        mighty.setGravityY(0);
+        mighty.setVelocityX(0);
         mighty.setSize(mighty.width / 1.2, mighty.height / 1.8);
         if(mighty.direction == "right"){
             mighty.setOffset(20, 20);
@@ -123,7 +122,6 @@ class AttackState extends State{
         }
         mighty.anims.play(`attack-${mighty.direction}`, true);
         mighty.once("animationcomplete", () => {
-            mighty.setGravityY(mighty.gravity);
             mighty.setSize(mighty.width / 1.5, mighty.height / 1.8); //Returning bounds
             if(mighty.isInAir == false){
                 this.stateMachine.transition("idle");
@@ -193,10 +191,10 @@ class FallState extends State{
         //Executing Movement
         if(left.isDown) {
             mighty.direction = "left";
-            mighty.x -= mighty.speed;
+            mighty.setVelocityX(-mighty.speed);
         } else if(right.isDown) {
             mighty.direction = "right";
-            mighty.x += mighty.speed;
+            mighty.setVelocityX(mighty.speed);
         }
         mighty.anims.play(`jump-${mighty.direction}`, true);
 

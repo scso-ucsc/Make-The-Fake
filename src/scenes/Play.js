@@ -26,33 +26,32 @@ class Play extends Phaser.Scene {
         // });
 
         //Creating Gummy Group
-        this.gummyGroup = this.physics.add.group();
-        gummyLayer.objects.forEach((gummy) => {
-            const frameProperties = gummy.properties.find((prop) => prop.name === "frame"); //ERROR FOUND HERE!!!!
-            const frame = frameProperties.value;
-            let newGummy = new Gummy(this, gummy.x, gummy.y, "gummy").setOrigin(0);
-            this.gummyGroup.add(newGummy);
+        this.gummies = map.createFromObjects("Gummies", {
+            key: "gummy"
         })
+        this.physics.world.enable(this.gummies, Phaser.Physics.Arcade.STATIC_BODY); //Adding physics to gummies
+        this.gummies.map((gummy) => {
+            gummy.body.setCircle(gummy.width / 3.9).setOffset(25, 21)
+        })
+        this.gummyGroup = this.add.group(this.gummies); //Adding made gummies into group
 
         //Adding Assets FOR TESTING
         this.add.text(0, 0, "playScene");
         this.orange = new BugsterOrange(this, 400, 0, "bugsterOrange", 0, "left");
         this.yellow = new BugsterYellow(this, 450, 0, "bugsterYellow", 0, "left");
         this.green = new BugsterGreen(this, 500, 0, "bugsterGreen", 0, "down");
-        this.gummyTest = new Gummy(this, 350, 350, "gummy"); //FOR TESTING
-        this.gummyGroup.add(this.gummyTest);
 
         //Adding Mighty
         const mightySpawn = map.findObject("MightySpawn", obj => obj.name === "spawnpoint");
         this.mighty = new Mighty(this, mightySpawn.x, mightySpawn.y, "mighty", 0, "right"); //Adding Mighty
 
         //Enabling Collision
-        this.physics.add.collider(this.mighty, terrainLayer, () => { //Enabling collision between Mighty and terrainLayer & Lets Mighty know he is touching the ground
+        this.physics.add.collider(this.mighty.body, terrainLayer, () => { //Enabling collision between Mighty and terrainLayer & Lets Mighty know he is touching the ground
             this.mighty.isInAir = false;
         });
         //this.physics.add.collider(this.mighty, scaffoldingLayer);
         this.physics.add.collider(this.gummyGroup, this.mighty, (gummy) => {
-            gummy.absorb();
+            gummy.destroy();
         })
 
         //Camera manipulation

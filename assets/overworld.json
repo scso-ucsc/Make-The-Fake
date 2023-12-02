@@ -68,6 +68,7 @@
         {
          "draworder":"topdown",
          "id":5,
+         "locked":true,
          "name":"Gummies",
          "objects":[
                 {
@@ -738,7 +739,128 @@
         }, 
         {
          "draworder":"topdown",
+         "id":8,
+         "locked":true,
+         "name":"Blocks",
+         "objects":[
+                {
+                 "gid":27,
+                 "height":100,
+                 "id":158,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":100,
+                 "x":2300,
+                 "y":400
+                }, 
+                {
+                 "gid":27,
+                 "height":100,
+                 "id":159,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":100,
+                 "x":2300,
+                 "y":300
+                }, 
+                {
+                 "gid":27,
+                 "height":100,
+                 "id":160,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":100,
+                 "x":2300,
+                 "y":200
+                }, 
+                {
+                 "gid":27,
+                 "height":100,
+                 "id":161,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":100,
+                 "x":2300,
+                 "y":100
+                }, 
+                {
+                 "gid":27,
+                 "height":100,
+                 "id":162,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":100,
+                 "x":2600,
+                 "y":800
+                }, 
+                {
+                 "gid":27,
+                 "height":100,
+                 "id":163,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":100,
+                 "x":5800,
+                 "y":800
+                }, 
+                {
+                 "gid":27,
+                 "height":100,
+                 "id":164,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":100,
+                 "x":7500,
+                 "y":800
+                }, 
+                {
+                 "gid":27,
+                 "height":100,
+                 "id":165,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":100,
+                 "x":8200,
+                 "y":700
+                }, 
+                {
+                 "gid":27,
+                 "height":100,
+                 "id":166,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":100,
+                 "x":8200,
+                 "y":800
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
          "id":6,
+         "locked":true,
          "name":"MightySpawn",
          "objects":[
                 {
@@ -759,8 +881,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":7,
- "nextobjectid":157,
+ "nextlayerid":9,
+ "nextobjectid":167,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.2",
@@ -1014,6 +1136,20 @@
          "imagewidth":100,
          "margin":0,
          "name":"gummy",
+         "spacing":0,
+         "tilecount":1,
+         "tileheight":100,
+         "tilewidth":100,
+         "transparentcolor":"#000000"
+        }, 
+        {
+         "columns":1,
+         "firstgid":27,
+         "image":"blockTile.png",
+         "imageheight":100,
+         "imagewidth":100,
+         "margin":0,
+         "name":"blockTile",
          "spacing":0,
          "tilecount":1,
          "tileheight":100,
