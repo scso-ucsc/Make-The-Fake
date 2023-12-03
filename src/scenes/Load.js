@@ -25,6 +25,10 @@ class Load extends Phaser.Scene {
             frameWidth: 100,
             frameHeight: 100
         });
+        this.load.spritesheet("healthBar", "./assets/healthBar.png", {
+            frameWidth: 200,
+            frameHeight: 50
+        });
 
         //Loading Spritesheet Assets
         this.load.spritesheet("mighty", "./assets/mighty.png", { //Loading Mighty Spritesheet
@@ -51,6 +55,10 @@ class Load extends Phaser.Scene {
         //Loading TileMap
         this.load.image("tilesetImage", "./assets/tileset.png"); //Loading tileset
         this.load.tilemapTiledJSON("tilemapJSON", "./assets/overworld.json");
+
+        //Loading BitMap Text
+        //Font From: https://www.1001fonts.com/press-start-font.html
+        this.load.bitmapFont("PressStart", "./assets/PressStartK.png", "./assets/PressStartK.xml");
     }
 
     create(){

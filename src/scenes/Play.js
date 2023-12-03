@@ -78,12 +78,19 @@ class Play extends Phaser.Scene {
         this.keys = this.input.keyboard.createCursorKeys();
         this.keys.keyH = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.H);
         this.keys.keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
+
+        //Initiating UI
+        this.healthBar = this.add.sprite(10, 10, "healthBar", this.mighty.health).setOrigin(0); //Healthbar
+        this.healthBar.setScrollFactor(0);
+        this.timeText = this.add.bitmapText(580, 25, "PressStart", "TIME", 20); //TIME
+        this.timeText.setScrollFactor(0);
         
         //Instructions
         //document.getElementById('info').innerHTML = '<strong>MightyFSM.js:</strong> Arrows: move | SPACE: jump | R: attack | H: hurt'
     }
 
     update(){
+        this.healthBar.setTexture("healthBar", this.mighty.health);
         //this.background.tilePositionX += 1;
         //Enabling Mighty's State Machine
         this.mightyFSM.step();

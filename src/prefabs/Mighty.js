@@ -10,6 +10,7 @@ class Mighty extends Phaser.Physics.Arcade.Sprite {
         this.setImmovable(true);
 
         //Mighty's properties
+        this.health = 10;
         this.direction = direction;
         this.speed = 300;
         this.gravity = 300
@@ -207,8 +208,8 @@ class FallState extends State{
 
 class HurtState extends State{
     enter(scene, mighty){
+        mighty.health -= 1;
         mighty.setVelocity(0);
-        mighty.setGravityY(0);
         mighty.anims.play(`hurt-${mighty.direction}`);
         scene.time.delayedCall(mighty.hurtTimer, () => {
             mighty.setGravityY(mighty.gravity);
