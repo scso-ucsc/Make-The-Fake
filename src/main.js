@@ -3,7 +3,7 @@
 //From: Kamen Rider Ex-Aid (2016)
 //Genre: 2D Action Platform
 //Phaser Components Used:
-//Time Spent: 25 Hours
+//Time Spent: 26 Hours
 
 'use strict'
 

@@ -47,7 +47,9 @@ class Play extends Phaser.Scene {
         //Adding Assets FOR TESTING
         this.add.text(0, 0, "playScene");
         this.orange = new BugsterOrange(this, 400, 0, "bugsterOrange", 0, "left");
-        this.orangeGroup = this.add.group();
+        this.orangeGroup = this.add.group({
+            runChildUpdate: true
+        });
         this.orangeGroup.add(this.orange);
         this.yellow = new BugsterYellow(this, 450, 0, "bugsterYellow", 0, "left");
         this.green = new BugsterGreen(this, 500, 0, "bugsterGreen", 0);
@@ -64,6 +66,16 @@ class Play extends Phaser.Scene {
             gummy.destroy();
             mighty.speed += 1;
             this.gummyCount += 1;
+        });
+        this.physics.add.overlap(this.mighty, this.orangeGroup, (mighty, orange) => {
+            if(mighty.isAttacking == true){
+                orange.destroy();
+                return;
+            }
+            if(mighty.immune == false){
+                mighty.immune = true;
+                return;
+            };
         });
         this.scaffoldingGroup.children.each((scaffold) => { //Attempting to enable collision between Mighty and Scaffolding group (NOT WORKING)
             this.physics.add.existing(scaffold);
@@ -85,7 +97,6 @@ class Play extends Phaser.Scene {
 
         //Enabling keys
         this.keys = this.input.keyboard.createCursorKeys();
-        this.keys.keyH = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.H);
         this.keys.keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
 
         //Initiating UI
@@ -129,22 +140,7 @@ class Play extends Phaser.Scene {
         //Enabling Mighty's State Machine
         this.mightyFSM.step();
         this.green.update();
-        this.orange.update();
+        //this.orangeGroup.update();
         this.yellow.update();
     }
-
-    // updateTime(){
-    //     let minuteExtraZero = "";
-    //     let secondExtraZero = "";
-    //     let elapsedTime = this.timedEvent.getElapsedSeconds();
-    //     let minuteVal = Math.floor(elapsedTime / 60);
-    //     let secondVal = Math.floor(elapsedTime - (minuteVal * 60));
-    //     if(minuteVal < 10){
-    //         minuteExtraZero = "0";
-    //     }
-    //     if(secondVal < 10){
-    //         secondExtraZero = "0";
-    //     }
-    //     this.timeClock.text = minuteExtraZero + minuteVal.toString() + secondExtraZero + secondVal.toString();
-    // }
 }
