@@ -18,20 +18,16 @@ class Play extends Phaser.Scene {
         let gummyLayer = map.getObjectLayer("Gummies");
 
         //Creating Scaffolding Layer
+        this.scaffoldingGroup = this.add.group();
         this.scaffolding = map.createFromObjects("Scaffold", {
             key: "tileset",
             frame: 2
-        })
+        });
+        //console.log(this.scaffolding); //DELETE
         this.physics.world.enable(this.scaffolding, Phaser.Physics.Arcade.ArcadeBodyCollision); //Adding physics to scaffolding
-        this.scaffolding.map((scaffold) => {
-            this.physics.add.existing(scaffold);
-            scaffold.body.setImmovable(true);
-            scaffold.body.checkCollision.down = false;
-            scaffold.body.checkCollision.left = false;
-            scaffold.body.checkCollision.right = false;
-            scaffold.body.checkCollision.up = true;
-        })
-        this.scaffoldingGroup = this.add.group(this.scaffolding);
+        this.scaffolding.forEach((scaffold) => {
+            this.scaffoldingGroup.add(scaffold);
+        });
 
         //Enabling collisions based on tilemap
         terrainLayer.setCollisionByProperty({ //Acquiring properties of terrain layer
@@ -51,8 +47,10 @@ class Play extends Phaser.Scene {
         //Adding Assets FOR TESTING
         this.add.text(0, 0, "playScene");
         this.orange = new BugsterOrange(this, 400, 0, "bugsterOrange", 0, "left");
+        this.orangeGroup = this.add.group();
+        this.orangeGroup.add(this.orange);
         this.yellow = new BugsterYellow(this, 450, 0, "bugsterYellow", 0, "left");
-        this.green = new BugsterGreen(this, 500, 0, "bugsterGreen", 0, "down");
+        this.green = new BugsterGreen(this, 500, 0, "bugsterGreen", 0);
 
         //Adding Mighty
         const mightySpawn = map.findObject("MightySpawn", obj => obj.name === "spawnpoint");
@@ -62,12 +60,23 @@ class Play extends Phaser.Scene {
         this.physics.add.collider(this.mighty.body, terrainLayer, () => { //Enabling collision between Mighty and terrainLayer & Lets Mighty know he is touching the ground
             this.mighty.isInAir = false;
         });
-        this.physics.add.collider(this.mighty, this.scaffoldingGroup);
         this.physics.add.collider(this.gummyGroup, this.mighty, (gummy, mighty) => {
             gummy.destroy();
             mighty.speed += 1;
             this.gummyCount += 1;
-        })
+        });
+        this.scaffoldingGroup.children.each((scaffold) => { //Attempting to enable collision between Mighty and Scaffolding group (NOT WORKING)
+            this.physics.add.existing(scaffold);
+            scaffold.body.setImmovable(true);
+            scaffold.body.checkCollision.down = false;
+            scaffold.body.checkCollision.left = false;
+            scaffold.body.checkCollision.right = false;
+            scaffold.body.checkCollision.up = true;
+            this.physics.add.collider(scaffold, this.mighty);
+        });
+        this.orangeGroup.children.each((child) => {
+            this.physics.add.collider(child, terrainLayer);
+        });
 
         //Camera manipulation
         this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels); //Setting camera bounds
@@ -119,7 +128,7 @@ class Play extends Phaser.Scene {
         //this.background.tilePositionX += 1;
         //Enabling Mighty's State Machine
         this.mightyFSM.step();
-        // this.greenBugsterFSM.step();
+        this.green.update();
         this.orange.update();
         this.yellow.update();
     }
