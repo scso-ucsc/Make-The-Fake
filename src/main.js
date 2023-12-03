@@ -8,7 +8,7 @@
 'use strict'
 
 let config = {
-    type: Phaser.CANVAS,
+    type: Phaser.AUTO,
     width: 800,
     height: 450,
     pixelArt: true,

@@ -82,8 +82,15 @@ class Play extends Phaser.Scene {
         //Initiating UI
         this.healthBar = this.add.sprite(10, 10, "healthBar", this.mighty.health).setOrigin(0); //Healthbar
         this.healthBar.setScrollFactor(0);
-        this.timeText = this.add.bitmapText(580, 25, "PressStart", "TIME", 20); //TIME
+        this.timeText = this.add.bitmapText(580, 25, "PressStart", "TIME", 20); //"TIME"
         this.timeText.setScrollFactor(0);
+        this.timeClock = this.add.bitmapText(668, 21, "PressStart", "00:00", 25).setTint(0xE1E3CE); //CLOCK
+        this.timeClock.setScrollFactor(0);
+        this.timedEvent = this.time.delayedCall(6000000); //For tracking how much time has passed by
+        this.gummyIcon = this.add.sprite(10, 50, "gummy").setScale(0.6).setOrigin(0); //Gummy Count
+        this.gummyIcon.setScrollFactor(0);
+        this.gummyText = this.add.bitmapText(70, 70, "PressStart", this.gummyCount, 20).setOrigin(0).setTint(0xDDB1D5); //Gummy Count
+        this.gummyText.setScrollFactor(0);
         
         //Instructions
         //document.getElementById('info').innerHTML = '<strong>MightyFSM.js:</strong> Arrows: move | SPACE: jump | R: attack | H: hurt'
@@ -91,6 +98,24 @@ class Play extends Phaser.Scene {
 
     update(){
         this.healthBar.setTexture("healthBar", this.mighty.health);
+
+        //Updating Time; Inspired by this formula: https://stackoverflow.com/questions/63870145/phaser-3-create-a-game-clock-with-minutes-and-seconds
+        let minuteExtraZero = "0";
+        let secondExtraZero = "0";
+        let elapsedTime = this.timedEvent.getElapsedSeconds();
+        let minuteVal = Math.floor(elapsedTime / 60);
+        let secondVal = Math.floor(elapsedTime - (minuteVal * 60));
+        if(minuteVal >= 10){
+            minuteExtraZero = "";
+        }
+        if(secondVal >= 10){
+            secondExtraZero = "";
+        }
+        this.timeClock.text = minuteExtraZero + minuteVal.toString() + ":" + secondExtraZero + secondVal.toString();
+        //Updating Gummy Count
+        this.gummyText.text = this.gummyCount;
+
+        //console.log(this.timedEvent.getElapsedSeconds());
         //this.background.tilePositionX += 1;
         //Enabling Mighty's State Machine
         this.mightyFSM.step();
@@ -98,4 +123,19 @@ class Play extends Phaser.Scene {
         this.orange.update();
         this.yellow.update();
     }
+
+    // updateTime(){
+    //     let minuteExtraZero = "";
+    //     let secondExtraZero = "";
+    //     let elapsedTime = this.timedEvent.getElapsedSeconds();
+    //     let minuteVal = Math.floor(elapsedTime / 60);
+    //     let secondVal = Math.floor(elapsedTime - (minuteVal * 60));
+    //     if(minuteVal < 10){
+    //         minuteExtraZero = "0";
+    //     }
+    //     if(secondVal < 10){
+    //         secondExtraZero = "0";
+    //     }
+    //     this.timeClock.text = minuteExtraZero + minuteVal.toString() + secondExtraZero + secondVal.toString();
+    // }
 }
