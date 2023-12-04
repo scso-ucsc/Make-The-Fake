@@ -50,10 +50,6 @@ class Play extends Phaser.Scene {
         })
         this.gummyGroup = this.add.group(this.gummies); //Adding made gummies into group
 
-        //Adding Assets FOR TESTING
-        this.add.text(0, 0, "playScene");
-        this.green = new BugsterGreen(this, 500, 0, "bugsterGreen", 0);
-
         //Adding Mighty
         const mightySpawn = map.findObject("MightySpawn", obj => obj.name === "spawnpoint");
         this.mighty = new Mighty(this, mightySpawn.x, mightySpawn.y, "mighty", 0, "right"); //Adding Mighty
@@ -67,7 +63,6 @@ class Play extends Phaser.Scene {
             this.orange = new BugsterOrange(this, orangeSpawn.x, orangeSpawn.y, "bugsterOrange", 0, "left");
             this.orangeGroup.add(this.orange);
         }
-
         //Spawning Yellow Bugsters
         this.yellowGroup = this.add.group({
             runChildUpdate: true
@@ -76,6 +71,15 @@ class Play extends Phaser.Scene {
             let yellowSpawn = map.findObject("YellowSpawn", obj => obj.name === "spawn" + i.toString());
             this.yellow = new BugsterYellow(this, yellowSpawn.x, yellowSpawn.y, "bugsterYellow", 0, "left");
             this.yellowGroup.add(this.yellow);
+        }
+        //Spawning Green Bugsters
+        this.greenGroup = this.add.group({
+            runChildUpdate: true
+        });
+        for(let i = 1; i <= 9; i++){
+            let greenSpawn = map.findObject("GreenSpawn", obj => obj.name === "spawn" + i.toString());
+            this.green = new BugsterGreen(this, greenSpawn.x, greenSpawn.y, "bugsterGreen", 0, "down");
+            this.greenGroup.add(this.green);
         }
 
         //Enabling Collision
@@ -107,11 +111,24 @@ class Play extends Phaser.Scene {
                 return;
             };
         });
+        this.physics.add.overlap(this.mighty, this.greenGroup, (mighty, green) => { //Mighty and Orange Bugsters Interaction
+            if(mighty.isAttacking == true){
+                green.destroy();
+                return;
+            }
+            if(mighty.immune == false){
+                mighty.immune = true;
+                return;
+            };
+        });
         this.physics.add.collider(this.orangeGroup, this.bugsterBarriers, (orange) => {
             orange.flip();
         });
         this.physics.add.collider(this.yellowGroup, this.bugsterBarriers, (yellow) => {
             yellow.flip();
+        });
+        this.physics.add.collider(this.greenGroup, this.bugsterBarriers, (green) => {
+            green.reverse();
         });
         this.scaffoldingGroup.children.each((scaffold) => { //Attempting to enable collision between Mighty and Scaffolding group (NOT WORKING)
             this.physics.add.existing(scaffold);
@@ -126,6 +143,9 @@ class Play extends Phaser.Scene {
             this.physics.add.collider(child, terrainLayer);
         });
         this.yellowGroup.children.each((child) => {
+            this.physics.add.collider(child, terrainLayer);
+        });
+        this.greenGroup.children.each((child) => {
             this.physics.add.collider(child, terrainLayer);
         });
 
@@ -178,7 +198,6 @@ class Play extends Phaser.Scene {
         //this.background.tilePositionX += 1;
         //Enabling Mighty's State Machine
         this.mightyFSM.step();
-        this.green.update();
         //this.orangeGroup.update();
         //this.yellow.update();
     }

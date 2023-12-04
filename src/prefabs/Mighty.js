@@ -183,6 +183,13 @@ class FallState extends State{
 
     execute(scene, mighty){
         const { left, right } = scene.keys;
+        const keyR = scene.keys.keyR; //Bounding to enable R key
+
+        if(Phaser.Input.Keyboard.JustDown(keyR)){
+            mighty.setVelocityY(0);
+            this.stateMachine.transition("attack");
+            return;
+        }
 
         if(mighty.immune == true){
             this.stateMachine.transition("hurt");

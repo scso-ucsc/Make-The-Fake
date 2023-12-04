@@ -1,6 +1,6 @@
 //Green Bugster Prefab
 class BugsterGreen extends Phaser.Physics.Arcade.Sprite{
-    constructor(scene, x, y, texture, frame){
+    constructor(scene, x, y, texture, frame, direction){
         super(scene, x, y, texture, frame);
         scene.add.existing(this);
         scene.physics.add.existing(this);
@@ -10,12 +10,26 @@ class BugsterGreen extends Phaser.Physics.Arcade.Sprite{
         this.setImmovable(true);
         this.setGravityY(100);
         this.body.setSize(this.width / 1.5, this.height / 1.9);
+        this.velocity = 100;
+        this.direction = direction;
 
         //Activating Animation
         this.play(`greenBugster-fly`);
     }
 
     update(){
-        this.setVelocityY(100)
+        if(this.direction == "down"){
+            this.setVelocityY(this.velocity)
+        } else{ //this.direction == "up"
+            this.setVelocityY(-this.velocity)
+        }
+    }
+
+    reverse(){
+        if(this.direction == "down"){
+            this.direction = "up";
+        } else{ //this.direction == "up"
+            this.direction = "down";
+        }
     }
 }
