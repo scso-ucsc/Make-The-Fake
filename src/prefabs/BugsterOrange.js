@@ -12,16 +12,21 @@ class BugsterOrange extends Phaser.Physics.Arcade.Sprite{
         this.velocity = 100;
         this.setGravityY(300);
         this.body.setSize(this.width / 1.5, this.height / 1.9);
+        this.scene = scene;
 
         //Activating Animation
         this.play(`orangeBugster-${this.direction}`);
     }
 
     update(){
-        if(this.direction == "left"){ //TEMP CODE
-            this.setVelocityX(-this.velocity);
-        } else { //direction == "right"
-            this.setVelocityX(this.velocity);
+        if(this.scene.gamePaused == true){
+            this.setVelocityX(0);
+        } else{ //this.scene.gamePaused == false
+            if(this.direction == "left"){ //TEMP CODE
+                this.setVelocityX(-this.velocity);
+            } else { //direction == "right"
+                this.setVelocityX(this.velocity);
+            }
         }
     }
 

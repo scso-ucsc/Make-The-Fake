@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="112" height="9" tilewidth="100" tileheight="100" infinite="0" nextlayerid="16" nextobjectid="252">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="112" height="9" tilewidth="100" tileheight="100" infinite="0" nextlayerid="18" nextobjectid="260">
  <editorsettings>
   <export target="overworld.json" format="json"/>
  </editorsettings>
@@ -270,10 +270,6 @@
   <object id="155" gid="26" x="9500" y="400" width="100" height="100"/>
  </objectgroup>
  <objectgroup id="8" name="Blocks" locked="1">
-  <object id="158" gid="27" x="2300" y="400" width="100" height="100"/>
-  <object id="159" gid="27" x="2300" y="300" width="100" height="100"/>
-  <object id="160" gid="27" x="2300" y="200" width="100" height="100"/>
-  <object id="161" gid="27" x="2300" y="100" width="100" height="100"/>
   <object id="162" gid="27" x="2600" y="800" width="100" height="100"/>
   <object id="163" gid="27" x="5800" y="800" width="100" height="100"/>
   <object id="164" gid="27" x="7500" y="800" width="100" height="100"/>
@@ -345,7 +341,7 @@
    <point/>
   </object>
  </objectgroup>
- <objectgroup id="12" name="BugsterBarrier">
+ <objectgroup id="12" name="BugsterBarrier" locked="1">
   <object id="214" name="blockpoint1" x="3000" y="600" width="100" height="100"/>
   <object id="215" name="blockpoint2" x="3400" y="600" width="100" height="100"/>
   <object id="216" name="blockpoint3" x="4000" y="400" width="100" height="100"/>
@@ -371,7 +367,21 @@
   <object id="248" name="blockpoint23" x="3800" y="300" width="100" height="100"/>
   <object id="249" name="blockpoint24" x="3800" y="700" width="100" height="100"/>
  </objectgroup>
- <objectgroup id="15" name="CompleteArea">
+ <objectgroup id="15" name="CompleteArea" locked="1">
   <object id="251" name="CompleteArea" x="10400" y="0" width="800" height="900"/>
+ </objectgroup>
+ <objectgroup id="17" name="BlockSpawn">
+  <object id="256" name="block1" x="2350" y="375">
+   <point/>
+  </object>
+  <object id="257" name="block2" x="2350" y="275">
+   <point/>
+  </object>
+  <object id="258" name="block3" x="2350" y="175">
+   <point/>
+  </object>
+  <object id="259" name="block4" x="2350" y="75">
+   <point/>
+  </object>
  </objectgroup>
 </map>

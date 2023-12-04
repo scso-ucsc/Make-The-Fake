@@ -21,11 +21,15 @@ class BugsterYellow extends Phaser.Physics.Arcade.Sprite{
     }
 
     update(){
-        if(this.immune == false){
-            if(this.direction == "left"){ //TEMP CODE
-                this.setVelocityX(-this.velocity);
-            } else { //direction == "right"
-                this.setVelocityX(this.velocity);
+        if(this.scene.gamePaused == true){
+            this.setVelocityX(0);
+        } else{ //this.scene.gamePaused == false
+            if(this.immune == false){
+                if(this.direction == "left"){ //TEMP CODE
+                    this.setVelocityX(-this.velocity);
+                } else { //direction == "right"
+                    this.setVelocityX(this.velocity);
+                }
             }
         }
     }

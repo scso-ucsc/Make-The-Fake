@@ -6,6 +6,9 @@ class Play extends Phaser.Scene {
     create(){
         //Initializing Variables
         this.gummyCount = 0;
+        this.gamePaused = false;
+        this.gameComplete = false;
+        this.gameLose = false;
 
         //Adding Background
         this.background = this.add.tileSprite(0, 0, 11200, 900, "playBackground").setOrigin(0, 0);
@@ -34,14 +37,13 @@ class Play extends Phaser.Scene {
         this.scaffolding.forEach((scaffold) => {
             this.scaffoldingGroup.add(scaffold);
         });
-        this.blockGroup = this.physics.add.group();
         //Creating Block Layer
-        this.blocks = map.createFromObjects("Blocks", {key: "blockTile"});
-        this.blocks.map((block) => {
-            this.physics.add.existing(block);
-            block.body.checkCollision.none = true;
-            block.body.setImmovable(true);
-        });
+        this.blockGroup = this.add.group();
+        for(let i = 1; i <= 4; i++){
+            let blockSpawn = map.findObject("BlockSpawn", obj => obj.name === "block" + i.toString());
+            this.block = new Block(this, blockSpawn.x, blockSpawn.y - 25, "blockTile");
+            this.blockGroup.add(this.block);
+        };
 
         //Enabling collisions based on tilemap
         terrainLayer.setCollisionByProperty({ //Acquiring properties of terrain layer
@@ -156,7 +158,15 @@ class Play extends Phaser.Scene {
         this.greenGroup.children.each((child) => {
             this.physics.add.collider(child, terrainLayer);
         });
+        this.blockGroup.children.each((child) => {
+            this.physics.add.collider(child, terrainLayer);
+        });
         this.physics.add.collider(this.mighty, this.blocks); //WORK ON
+        this.physics.add.collider(this.mighty, this.blockGroup, (mighty, block) =>{
+            if(mighty.isAttacking == true){
+                block.break();
+            }
+        });
 
         //Camera manipulation
         this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels); //Setting camera bounds
@@ -166,6 +176,7 @@ class Play extends Phaser.Scene {
         //Enabling keys
         this.keys = this.input.keyboard.createCursorKeys();
         this.keys.keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
+        keyESC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
 
         //Initiating UI
         this.healthBar = this.add.sprite(10, 10, "healthBar", this.mighty.health).setOrigin(0); //Healthbar
@@ -185,29 +196,30 @@ class Play extends Phaser.Scene {
     }
 
     update(){
-        this.healthBar.setTexture("healthBar", this.mighty.health);
-
-        //Updating Time; Inspired by this formula: https://stackoverflow.com/questions/63870145/phaser-3-create-a-game-clock-with-minutes-and-seconds
-        let minuteExtraZero = "0";
-        let secondExtraZero = "0";
-        let elapsedTime = this.timedEvent.getElapsedSeconds();
-        let minuteVal = Math.floor(elapsedTime / 60);
-        let secondVal = Math.floor(elapsedTime - (minuteVal * 60));
-        if(minuteVal >= 10){
-            minuteExtraZero = "";
+        if(!this.gameComplete && !this.gameLose && !this.gamePaused){
+            //Pause game if ESC pressed
+            if(Phaser.Input.Keyboard.JustDown(keyESC)){
+                this.gamePaused = true;
+            }
+            //Updating Healthbar based on Mighty's current health
+            this.healthBar.setTexture("healthBar", this.mighty.health);
+            //Updating Time; Inspired by this formula: https://stackoverflow.com/questions/63870145/phaser-3-create-a-game-clock-with-minutes-and-seconds
+            let minuteExtraZero = "0";
+            let secondExtraZero = "0";
+            let elapsedTime = this.timedEvent.getElapsedSeconds();
+            let minuteVal = Math.floor(elapsedTime / 60);
+            let secondVal = Math.floor(elapsedTime - (minuteVal * 60));
+            if(minuteVal >= 10){
+                minuteExtraZero = "";
+            }
+            if(secondVal >= 10){
+                secondExtraZero = "";
+            }
+            this.timeClock.text = minuteExtraZero + minuteVal.toString() + ":" + secondExtraZero + secondVal.toString();
+            //Updating Gummy Count
+            this.gummyText.text = this.gummyCount;
+            //Updating Mighty
+            this.mightyFSM.step();
         }
-        if(secondVal >= 10){
-            secondExtraZero = "";
-        }
-        this.timeClock.text = minuteExtraZero + minuteVal.toString() + ":" + secondExtraZero + secondVal.toString();
-        //Updating Gummy Count
-        this.gummyText.text = this.gummyCount;
-
-        //console.log(this.timedEvent.getElapsedSeconds());
-        //this.background.tilePositionX += 1;
-        //Enabling Mighty's State Machine
-        this.mightyFSM.step();
-        //this.orangeGroup.update();
-        //this.yellow.update();
     }
 }

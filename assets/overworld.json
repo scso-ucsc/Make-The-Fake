@@ -1129,54 +1129,6 @@
                 {
                  "gid":27,
                  "height":100,
-                 "id":158,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":100,
-                 "x":2300,
-                 "y":400
-                }, 
-                {
-                 "gid":27,
-                 "height":100,
-                 "id":159,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":100,
-                 "x":2300,
-                 "y":300
-                }, 
-                {
-                 "gid":27,
-                 "height":100,
-                 "id":160,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":100,
-                 "x":2300,
-                 "y":200
-                }, 
-                {
-                 "gid":27,
-                 "height":100,
-                 "id":161,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":100,
-                 "x":2300,
-                 "y":100
-                }, 
-                {
-                 "gid":27,
-                 "height":100,
                  "id":162,
                  "name":"",
                  "rotation":0,
@@ -1519,6 +1471,7 @@
         {
          "draworder":"topdown",
          "id":12,
+         "locked":true,
          "name":"BugsterBarrier",
          "objects":[
                 {
@@ -1794,6 +1747,7 @@
         {
          "draworder":"topdown",
          "id":15,
+         "locked":true,
          "name":"CompleteArea",
          "objects":[
                 {
@@ -1812,9 +1766,68 @@
          "visible":true,
          "x":0,
          "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":17,
+         "name":"BlockSpawn",
+         "objects":[
+                {
+                 "height":0,
+                 "id":256,
+                 "name":"block1",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":2350,
+                 "y":375
+                }, 
+                {
+                 "height":0,
+                 "id":257,
+                 "name":"block2",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":2350,
+                 "y":275
+                }, 
+                {
+                 "height":0,
+                 "id":258,
+                 "name":"block3",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":2350,
+                 "y":175
+                }, 
+                {
+                 "height":0,
+                 "id":259,
+                 "name":"block4",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":2350,
+                 "y":75
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
         }],
- "nextlayerid":16,
- "nextobjectid":252,
+ "nextlayerid":18,
+ "nextobjectid":260,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.2",
