@@ -7,8 +7,9 @@ class Play extends Phaser.Scene {
         //Initializing Variables
         this.gummyCount = 0;
         this.gamePaused = false;
-        this.gameComplete = false;
-        this.gameLose = false;
+        this.gameClear = false;
+        this.gameOver = false;
+        this.pauseChoice = "yes";
 
         //Adding Background
         this.background = this.add.tileSprite(0, 0, 11200, 900, "playBackground").setOrigin(0, 0);
@@ -191,15 +192,43 @@ class Play extends Phaser.Scene {
         this.gummyText = this.add.bitmapText(70, 70, "PressStart", this.gummyCount, 20).setOrigin(0).setTint(0xDDB1D5); //Gummy Count
         this.gummyText.setScrollFactor(0);
         
+        //Paused Features
+        this.blackOverlay = this.add.rectangle(0, 0, map.widthInPixels, map.heightInPixels, 0x000000).setOrigin(0).setAlpha(0); //Enabling black box for overlay
+        this.pausedText = this.add.bitmapText(400, 150, "PressStart", "GAME PAUSED", 50).setOrigin(0.5).setTint(0xDA6AA2).setAlpha(0).setScrollFactor(0);
+        let questionConfig = {
+            fontFamily: "Verdana",
+            fontSize: "32px",
+            color: "#FFFFFF",
+            align: "middle"
+        };
+        this.pausedQuestion = this.add.text(400, 225, "Exit Level?", questionConfig).setOrigin(0.5).setAlpha(0).setScrollFactor(0);
+        let textConfig = {
+            fontFamily: "Verdana",
+            fontSize: "28px",
+            color: "#FFFFFF",
+            stroke: "#CC0033",
+            strokeThickness: 5,
+            align: "middle"
+        };
+        this.yesText = this.add.text(300, 300, "YES", textConfig).setOrigin(0.5).setScrollFactor(0).setScale(1).setAlpha(0);
+        this.noText = this.add.text(500, 300, "NO", textConfig).setOrigin(0.5).setScrollFactor(0).setScale(0.85).setAlpha(0);
+        //GAME OVER Features
+        this.gameOverText = this.add.bitmapText(400, 150, "PressStart", "GAME OVER", 50).setOrigin(0.5).setTint(0xDA6AA2).setAlpha(0).setScrollFactor(0);
+        this.gameOverQuestion = this.add.text(400, 225, "RESTART?", questionConfig).setOrigin(0.5).setAlpha(0).setScrollFactor(0);
+
         //Instructions
         //document.getElementById('info').innerHTML = '<strong>MightyFSM.js:</strong> Arrows: move | SPACE: jump | R: attack | H: hurt'
     }
 
     update(){
-        if(!this.gameComplete && !this.gameLose && !this.gamePaused){
+        if(!this.gameClear && !this.gameOver && !this.gamePaused){
             //Pause game if ESC pressed
             if(Phaser.Input.Keyboard.JustDown(keyESC)){
                 this.gamePaused = true;
+            };
+            //End Game if Mighty Runs out of Health
+            if(this.mighty.health == 0){
+                this.gameOver = true;
             }
             //Updating Healthbar based on Mighty's current health
             this.healthBar.setTexture("healthBar", this.mighty.health);
@@ -220,6 +249,59 @@ class Play extends Phaser.Scene {
             this.gummyText.text = this.gummyCount;
             //Updating Mighty
             this.mightyFSM.step();
+        } else if(this.gamePaused){ //Display Paused UI if game is paused
+            this.blackOverlay.setAlpha(0.8);
+            this.pausedText.setAlpha(1);
+            this.pausedQuestion.setAlpha(1);
+            if(this.pauseChoice == "yes"){
+                this.yesText.setAlpha(1).setScale(1);
+                this.noText.setAlpha(0.5).setScale(0.85);
+                if(Phaser.Input.Keyboard.JustDown(this.keys.right)){
+                    this.pauseChoice = "no";
+                }
+                if(Phaser.Input.Keyboard.JustDown(this.keys.space)){
+                    this.scene.start("menuScene")
+                }
+            } else{ //this.pauseChoice == "no";
+                this.yesText.setAlpha(0.5).setScale(0.85);
+                this.noText.setAlpha(1).setScale(1);
+                if(Phaser.Input.Keyboard.JustDown(this.keys.left)){
+                    this.pauseChoice = "yes";
+                }
+                if(Phaser.Input.Keyboard.JustDown(this.keys.space)){
+                    this.pauseChoice = "yes";
+                    this.gamePaused = false;
+                    this.blackOverlay.setAlpha(0);
+                    this.pausedText.setAlpha(0);
+                    this.pausedQuestion.setAlpha(0);
+                    this.yesText.setAlpha(0);
+                    this.noText.setAlpha(0);
+                }
+            }
+        } else if(this.gameOver){
+            this.blackOverlay.setAlpha(0.8);
+            this.gameOverText.setAlpha(1);
+            this.gameOverQuestion.setAlpha(1);
+            if(this.pauseChoice == "yes"){
+                this.yesText.setAlpha(1).setScale(1);
+                this.noText.setAlpha(0.5).setScale(0.85);
+                if(Phaser.Input.Keyboard.JustDown(this.keys.right)){
+                    this.pauseChoice = "no";
+                }
+                if(Phaser.Input.Keyboard.JustDown(this.keys.space)){
+                    this.scene.restart();
+                }
+            } else{ //this.pauseChoice == "no";
+                this.yesText.setAlpha(0.5).setScale(0.85);
+                this.noText.setAlpha(1).setScale(1);
+                if(Phaser.Input.Keyboard.JustDown(this.keys.left)){
+                    this.pauseChoice = "yes";
+                }
+                if(Phaser.Input.Keyboard.JustDown(this.keys.space)){
+                    this.scene.start("menuScene")
+                }
+            }
+
         }
     }
 }
