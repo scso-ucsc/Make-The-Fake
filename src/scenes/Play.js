@@ -12,8 +12,9 @@ class Play extends Phaser.Scene {
         //Adding TileMap
         const map = this.add.tilemap("tilemapJSON");
         const tileset = map.addTilesetImage("tileset", "tilesetImage"); //Connecting image to the data; "tileset" was the original name of the file
+        const instructionsTileset = map.addTilesetImage("instructions", "instructions");
         //Creating Terrain and Background Layers
-        const backgroundLayer = map.createLayer("Background", tileset, 0, 0);
+        const backgroundLayer = map.createLayer("Background", [tileset, instructionsTileset], 0, 0);
         const terrainLayer = map.createLayer("Terrain", tileset, 0, 0);
         let scaffoldingLayer = map.getObjectLayer("Scaffold");
         let gummyLayer = map.getObjectLayer("Gummies");
@@ -24,15 +25,22 @@ class Play extends Phaser.Scene {
         this.physics.world.enable(this.bugsterBarriers, Phaser.Physics.Arcade.STATIC_BODY);
 
         //Creating Scaffolding Layer
-        this.scaffoldingGroup = this.add.group();
+        this.scaffoldingGroup = this.physics.add.group();
         this.scaffolding = map.createFromObjects("Scaffold", {
             key: "tileset",
             frame: 2
         });
-        //console.log(this.scaffolding); //DELETE
         this.physics.world.enable(this.scaffolding, Phaser.Physics.Arcade.ArcadeBodyCollision); //Adding physics to scaffolding
         this.scaffolding.forEach((scaffold) => {
             this.scaffoldingGroup.add(scaffold);
+        });
+        this.blockGroup = this.physics.add.group();
+        //Creating Block Layer
+        this.blocks = map.createFromObjects("Blocks", {key: "blockTile"});
+        this.blocks.map((block) => {
+            this.physics.add.existing(block);
+            block.body.checkCollision.none = true;
+            block.body.setImmovable(true);
         });
 
         //Enabling collisions based on tilemap
@@ -148,6 +156,7 @@ class Play extends Phaser.Scene {
         this.greenGroup.children.each((child) => {
             this.physics.add.collider(child, terrainLayer);
         });
+        this.physics.add.collider(this.mighty, this.blocks); //WORK ON
 
         //Camera manipulation
         this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels); //Setting camera bounds

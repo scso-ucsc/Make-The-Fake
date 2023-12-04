@@ -21,10 +21,15 @@ class Load extends Phaser.Scene {
         this.load.image("playBackground", "./assets/playBackground.jpg")
         this.load.image("menuTitle", "./assets/menuTitle.png");
         this.load.image("gummy", "./assets/gummy.png");
+        this.load.image("blockTile", "./assets/blockTile.png")
         this.load.spritesheet("tileset", "./assets/tileset.png", {
             frameWidth: 100,
             frameHeight: 100
         });
+        // this.load.spritesheet("instructions", "./assets/instructions.png", {
+        //     frameWidth: 100,
+        //     frameHeight: 100
+        // });
         this.load.spritesheet("healthBar", "./assets/healthBar.png", {
             frameWidth: 200,
             frameHeight: 50
@@ -54,6 +59,7 @@ class Load extends Phaser.Scene {
 
         //Loading TileMap
         this.load.image("tilesetImage", "./assets/tileset.png"); //Loading tileset
+        this.load.image("instructions", "./assets/instructions.png"); //Loading Instructions tileset
         this.load.tilemapTiledJSON("tilemapJSON", "./assets/overworld.json");
 
         //Loading BitMap Text

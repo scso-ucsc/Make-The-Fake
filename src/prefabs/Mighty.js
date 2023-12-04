@@ -12,7 +12,7 @@ class Mighty extends Phaser.Physics.Arcade.Sprite {
         //Mighty's properties
         this.health = 10;
         this.direction = direction;
-        this.speed = 300;
+        this.speed = 250;
         this.gravity = 300
         this.hurtTimer = 1500; //In ms
         this.setGravityY(this.gravity); //Applying gravity
@@ -162,10 +162,10 @@ class JumpState extends State{
         //Executing Movement
         if(left.isDown) {
             mighty.direction = "left";
-            mighty.setVelocityX(-mighty.speed);
+            mighty.setVelocityX(-mighty.speed / 4 * 3);
         } else if(right.isDown) {
             mighty.direction = "right";
-            mighty.setVelocityX(mighty.speed);
+            mighty.setVelocityX(mighty.speed / 4 * 3);
         }
         mighty.anims.play(`jump-${mighty.direction}`, true);
 
@@ -183,13 +183,6 @@ class FallState extends State{
 
     execute(scene, mighty){
         const { left, right } = scene.keys;
-        const keyR = scene.keys.keyR; //Bounding to enable R key
-
-        if(Phaser.Input.Keyboard.JustDown(keyR)){
-            mighty.setVelocityY(0);
-            this.stateMachine.transition("attack");
-            return;
-        }
 
         if(mighty.immune == true){
             this.stateMachine.transition("hurt");
@@ -199,10 +192,10 @@ class FallState extends State{
         //Executing Movement
         if(left.isDown) {
             mighty.direction = "left";
-            mighty.setVelocityX(-mighty.speed);
+            mighty.setVelocityX(-mighty.speed / 4 * 3);
         } else if(right.isDown) {
             mighty.direction = "right";
-            mighty.setVelocityX(mighty.speed);
+            mighty.setVelocityX(mighty.speed / 4 * 3);
         }
         mighty.anims.play(`jump-${mighty.direction}`, true);
 
