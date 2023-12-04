@@ -72,8 +72,11 @@ class Play extends Phaser.Scene {
         this.yellowGroup = this.add.group({
             runChildUpdate: true
         });
-        this.yellow = new BugsterYellow(this, 450, 0, "bugsterYellow", 0, "left");
-        this.yellowGroup.add(this.yellow);
+        for(let i = 1; i <= 3; i++){
+            let yellowSpawn = map.findObject("YellowSpawn", obj => obj.name === "spawn" + i.toString());
+            this.yellow = new BugsterYellow(this, yellowSpawn.x, yellowSpawn.y, "bugsterYellow", 0, "left");
+            this.yellowGroup.add(this.yellow);
+        }
 
         //Enabling Collision
         this.physics.add.collider(this.mighty.body, terrainLayer, () => { //Enabling collision between Mighty and terrainLayer & Lets Mighty know he is touching the ground
@@ -84,7 +87,7 @@ class Play extends Phaser.Scene {
             mighty.speed += 1;
             this.gummyCount += 1;
         });
-        this.physics.add.overlap(this.mighty, this.orangeGroup, (mighty, orange) => {
+        this.physics.add.overlap(this.mighty, this.orangeGroup, (mighty, orange) => { //Mighty and Orange Bugsters Interaction
             if(mighty.isAttacking == true){
                 orange.destroy();
                 return;
@@ -94,8 +97,21 @@ class Play extends Phaser.Scene {
                 return;
             };
         });
+        this.physics.add.overlap(this.mighty, this.yellowGroup, (mighty, yellow) => { //Mighty and Yellow Bugsters Interaction
+            if(mighty.isAttacking == true && yellow.immune == false){
+                yellow.hit();
+                return;
+            }
+            if(mighty.immune == false){
+                mighty.immune = true;
+                return;
+            };
+        });
         this.physics.add.collider(this.orangeGroup, this.bugsterBarriers, (orange) => {
             orange.flip();
+        });
+        this.physics.add.collider(this.yellowGroup, this.bugsterBarriers, (yellow) => {
+            yellow.flip();
         });
         this.scaffoldingGroup.children.each((scaffold) => { //Attempting to enable collision between Mighty and Scaffolding group (NOT WORKING)
             this.physics.add.existing(scaffold);
@@ -164,6 +180,6 @@ class Play extends Phaser.Scene {
         this.mightyFSM.step();
         this.green.update();
         //this.orangeGroup.update();
-        this.yellow.update();
+        //this.yellow.update();
     }
 }

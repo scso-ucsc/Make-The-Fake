@@ -1352,6 +1352,7 @@
         {
          "draworder":"topdown",
          "id":12,
+         "locked":true,
          "name":"BugsterBarrier",
          "objects":[
                 {
