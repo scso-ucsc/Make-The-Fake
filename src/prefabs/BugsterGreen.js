@@ -18,10 +18,14 @@ class BugsterGreen extends Phaser.Physics.Arcade.Sprite{
     }
 
     update(){
-        if(this.direction == "down"){
-            this.setVelocityY(this.velocity)
-        } else{ //this.direction == "up"
-            this.setVelocityY(-this.velocity)
+        if(this.scene.gamePaused == true){
+            this.setVelocityY(0);
+        } else{ //this.scene.gamePaused == false
+            if(this.direction == "down"){
+                this.setVelocityY(this.velocity)
+            } else{ //this.direction == "up"
+                this.setVelocityY(-this.velocity)
+            }
         }
     }
 
