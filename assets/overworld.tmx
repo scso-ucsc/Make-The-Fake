@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="112" height="9" tilewidth="100" tileheight="100" infinite="0" nextlayerid="11" nextobjectid="207">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="112" height="9" tilewidth="100" tileheight="100" infinite="0" nextlayerid="14" nextobjectid="228">
  <editorsettings>
   <export target="overworld.json" format="json"/>
  </editorsettings>
@@ -282,11 +282,11 @@
    <point/>
   </object>
  </objectgroup>
- <objectgroup id="10" name="OrangeSpawn">
+ <objectgroup id="10" name="OrangeSpawn" locked="1">
   <object id="198" name="spawn1" x="3350" y="675">
    <point/>
   </object>
-  <object id="199" name="spawn2" x="5350" y="675">
+  <object id="199" name="spawn2" x="4450" y="475">
    <point/>
   </object>
   <object id="203" name="spawn3" x="6350" y="275">
@@ -299,6 +299,33 @@
    <point/>
   </object>
   <object id="206" name="spawn6" x="9350" y="175">
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="12" name="BugsterBarrier">
+  <object id="214" name="blockpoint1" x="3000" y="600" width="100" height="100"/>
+  <object id="215" name="blockpoint2" x="3400" y="600" width="100" height="100"/>
+  <object id="216" name="blockpoint3" x="4000" y="400" width="100" height="100"/>
+  <object id="217" name="blockpoint4" x="4500" y="400" width="100" height="100"/>
+  <object id="218" name="blockpoint5" x="4400" y="100" width="100" height="100"/>
+  <object id="219" name="blockpoint6" x="5100" y="100" width="100" height="100"/>
+  <object id="220" name="blockpoint7" x="5900" y="200" width="100" height="100"/>
+  <object id="221" name="blockpoint8" x="6900" y="200" width="100" height="100"/>
+  <object id="222" name="blockpoint9" x="7500" y="700" width="100" height="100"/>
+  <object id="223" name="blockpoint10" x="6700" y="700" width="100" height="100"/>
+  <object id="224" name="blockpoint11" x="8100" y="300" width="100" height="100"/>
+  <object id="225" name="blockpoint12" x="9600" y="300" width="100" height="100"/>
+  <object id="226" name="blockpoint13" x="8700" y="100" width="100" height="100"/>
+  <object id="227" name="blockpoint14" x="9400" y="100" width="100" height="100"/>
+ </objectgroup>
+ <objectgroup id="11" name="YellowSpawn" locked="1">
+  <object id="207" name="spawn1" x="4950" y="175">
+   <point/>
+  </object>
+  <object id="210" name="spawn2" x="7450" y="775">
+   <point/>
+  </object>
+  <object id="211" name="spawn3" x="9550" y="375">
    <point/>
   </object>
  </objectgroup>

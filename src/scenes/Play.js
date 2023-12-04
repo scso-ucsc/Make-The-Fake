@@ -12,10 +12,16 @@ class Play extends Phaser.Scene {
         //Adding TileMap
         const map = this.add.tilemap("tilemapJSON");
         const tileset = map.addTilesetImage("tileset", "tilesetImage"); //Connecting image to the data; "tileset" was the original name of the file
+        //Creating Terrain and Background Layers
         const backgroundLayer = map.createLayer("Background", tileset, 0, 0);
         const terrainLayer = map.createLayer("Terrain", tileset, 0, 0);
         let scaffoldingLayer = map.getObjectLayer("Scaffold");
         let gummyLayer = map.getObjectLayer("Gummies");
+
+        //Creating Bugster Barriers
+        this.bugsterBarriers = map.createFromObjects("BugsterBarrier");
+        this.bugsterBarriers.map((orange) => {orange.setAlpha(0)});
+        this.physics.world.enable(this.bugsterBarriers, Phaser.Physics.Arcade.STATIC_BODY);
 
         //Creating Scaffolding Layer
         this.scaffoldingGroup = this.add.group();
@@ -46,17 +52,28 @@ class Play extends Phaser.Scene {
 
         //Adding Assets FOR TESTING
         this.add.text(0, 0, "playScene");
-        this.orange = new BugsterOrange(this, 400, 0, "bugsterOrange", 0, "left");
-        this.orangeGroup = this.add.group({
-            runChildUpdate: true
-        });
-        this.orangeGroup.add(this.orange);
-        this.yellow = new BugsterYellow(this, 450, 0, "bugsterYellow", 0, "left");
         this.green = new BugsterGreen(this, 500, 0, "bugsterGreen", 0);
 
         //Adding Mighty
         const mightySpawn = map.findObject("MightySpawn", obj => obj.name === "spawnpoint");
         this.mighty = new Mighty(this, mightySpawn.x, mightySpawn.y, "mighty", 0, "right"); //Adding Mighty
+
+        //Spawning Orange Bugsters
+        this.orangeGroup = this.add.group({
+            runChildUpdate: true
+        });
+        for(let i = 1; i <= 6; i++){
+            let orangeSpawn = map.findObject("OrangeSpawn", obj => obj.name === "spawn" + i.toString());
+            this.orange = new BugsterOrange(this, orangeSpawn.x, orangeSpawn.y, "bugsterOrange", 0, "left");
+            this.orangeGroup.add(this.orange);
+        }
+
+        //Spawning Yellow Bugsters
+        this.yellowGroup = this.add.group({
+            runChildUpdate: true
+        });
+        this.yellow = new BugsterYellow(this, 450, 0, "bugsterYellow", 0, "left");
+        this.yellowGroup.add(this.yellow);
 
         //Enabling Collision
         this.physics.add.collider(this.mighty.body, terrainLayer, () => { //Enabling collision between Mighty and terrainLayer & Lets Mighty know he is touching the ground
@@ -77,6 +94,9 @@ class Play extends Phaser.Scene {
                 return;
             };
         });
+        this.physics.add.collider(this.orangeGroup, this.bugsterBarriers, (orange) => {
+            orange.flip();
+        });
         this.scaffoldingGroup.children.each((scaffold) => { //Attempting to enable collision between Mighty and Scaffolding group (NOT WORKING)
             this.physics.add.existing(scaffold);
             scaffold.body.setImmovable(true);
@@ -87,6 +107,9 @@ class Play extends Phaser.Scene {
             this.physics.add.collider(scaffold, this.mighty);
         });
         this.orangeGroup.children.each((child) => {
+            this.physics.add.collider(child, terrainLayer);
+        });
+        this.yellowGroup.children.each((child) => {
             this.physics.add.collider(child, terrainLayer);
         });
 
