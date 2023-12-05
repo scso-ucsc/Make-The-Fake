@@ -29,6 +29,7 @@ class Play extends Phaser.Scene {
         this.physics.world.enable(this.bugsterBarriers, Phaser.Physics.Arcade.STATIC_BODY);
 
         //Creating Scaffolding Layer
+        //getObjectLayer, forEach, new Prefab
         this.scaffoldingGroup = this.physics.add.group();
         this.scaffolding = map.createFromObjects("Scaffold", {
             key: "tileset",
@@ -92,6 +93,10 @@ class Play extends Phaser.Scene {
             this.green = new BugsterGreen(this, greenSpawn.x, greenSpawn.y, "bugsterGreen", 0, "down");
             this.greenGroup.add(this.green);
         }
+
+        //SCAFFOLD TEST DELETE!!!!!!!!!!!!!!!!!!!!!!
+        this.scaffoldTest = new Scaffold(this, 300, 300, "tileset", 2).setOrigin(0);
+        this.physics.add.collider(this.mighty, this.scaffoldTest);
 
         //Enabling Collision
         this.physics.add.collider(this.mighty.body, terrainLayer, () => { //Enabling collision between Mighty and terrainLayer & Lets Mighty know he is touching the ground

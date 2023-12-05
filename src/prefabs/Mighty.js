@@ -2,10 +2,10 @@
 class Mighty extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y, texture, frame, direction){
         super(scene, x, y, texture, frame);
-        scene.add.existing(this); //Adding Mighty to the scene
-        scene.physics.add.existing(this); //Adding physics to Mighty in this scene
+        this.parentScene = scene;
+        this.parentScene.add.existing(this); //Adding Mighty to the scene
+        this.parentScene.physics.add.existing(this); //Adding physics to Mighty in this scene
 
-        //this.body.setSize(this.width / 2, this.height / 2) //Adjusting Mighty's size
         this.setCollideWorldBounds(true); //Enabling collision with world bounds
         this.setImmovable(true);
 
@@ -134,6 +134,21 @@ class AttackState extends State{
             }
         });
     }
+    
+    execute(scene, mighty){
+        const { left, right } = scene.keys;
+        
+        //Executing Movement
+        if(left.isDown) {
+            mighty.direction = "left";
+            mighty.setVelocityX(-mighty.speed / 4 * 3);
+        } else if(right.isDown) {
+            mighty.direction = "right";
+            mighty.setVelocityX(mighty.speed / 4 * 3);
+        } else{ //Neither left or right being pressed
+            mighty.setVelocityX(0);
+        }
+    }
 }
 
 class JumpState extends State{
@@ -166,6 +181,8 @@ class JumpState extends State{
         } else if(right.isDown) {
             mighty.direction = "right";
             mighty.setVelocityX(mighty.speed / 4 * 3);
+        } else{ //Neither left or right being pressed
+            mighty.setVelocityX(0);
         }
         mighty.anims.play(`jump-${mighty.direction}`, true);
 
