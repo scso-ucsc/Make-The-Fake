@@ -137,7 +137,7 @@ class AttackState extends State{
     
     execute(scene, mighty){
         const { left, right } = scene.keys;
-        
+
         //Executing Movement
         if(left.isDown) {
             mighty.direction = "left";
@@ -213,6 +213,8 @@ class FallState extends State{
         } else if(right.isDown) {
             mighty.direction = "right";
             mighty.setVelocityX(mighty.speed / 4 * 3);
+        } else{
+            mighty.setVelocityX(0);
         }
         mighty.anims.play(`jump-${mighty.direction}`, true);
 
