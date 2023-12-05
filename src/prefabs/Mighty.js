@@ -20,6 +20,7 @@ class Mighty extends Phaser.Physics.Arcade.Sprite {
         this.isInAir = false;
         this.immune = false;
         this.isAttacking = false;
+        this.complete = false;
 
         //Initializing state machine to handle Mighty
         scene.mightyFSM = new StateMachine("idle", {
@@ -28,7 +29,8 @@ class Mighty extends Phaser.Physics.Arcade.Sprite {
             jump: new JumpState(),
             fall: new FallState(),
             attack: new AttackState(),
-            hurt: new HurtState()
+            hurt: new HurtState(),
+            complete: new CompleteState()
         }, [scene, this]);
     }
 }
@@ -43,7 +45,6 @@ class IdleState extends State {
     execute(scene, mighty) {
         const {left, right, space} = scene.keys;
         const keyH = scene.keys.keyH; //Initializing H key for TESTING
-        //const keySPACE = scene.keys.keySPACE; //Bounding to enable SPACE key
         const keyR = scene.keys.keyR; //Bounding to enable R key
 
         //Transition to jump if space is pressed
@@ -61,6 +62,12 @@ class IdleState extends State {
         //Transition to hurt if h is pressed for TESTING
         if(mighty.immune == true){
             this.stateMachine.transition("hurt");
+            return;
+        }
+
+        //Transition to complete is Mighty reaches the end of the game
+        if(mighty.complete == true){
+            this.stateMachine.transition("complete");
             return;
         }
 
@@ -86,6 +93,11 @@ class RunState extends State {
         //Transition to hurt if h is pressed for TESTING
         if(mighty.immune == true){
             this.stateMachine.transition("hurt");
+            return;
+        }
+
+        if(mighty.complete == true){
+            this.stateMachine.transition("complete");
             return;
         }
 
@@ -174,6 +186,11 @@ class JumpState extends State{
             return;
         }
 
+        if(mighty.complete == true){
+            this.stateMachine.transition("complete");
+            return;
+        }
+
         //Executing Movement
         if(left.isDown) {
             mighty.direction = "left";
@@ -238,5 +255,13 @@ class HurtState extends State{
                 this.stateMachine.transition("fall");
             }
         });
+    }
+}
+
+class CompleteState extends State{
+    enter(scene, mighty){
+        mighty.setCollideWorldBounds(false);
+        mighty.setVelocityX(mighty.speed / 4 * 3);
+        mighty.anims.play(`run-${mighty.direction}`, true);
     }
 }

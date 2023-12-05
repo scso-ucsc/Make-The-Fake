@@ -20,16 +20,13 @@ class Load extends Phaser.Scene {
         this.load.image("menuBackground", "./assets/menuBackground.jpg");
         this.load.image("playBackground", "./assets/playBackground.jpg")
         this.load.image("menuTitle", "./assets/menuTitle.png");
+        this.load.image("gameClearTitle", "./assets/gameClearText.png")
         this.load.image("gummy", "./assets/gummy.png");
         this.load.image("blockTile", "./assets/blockTile.png")
         this.load.spritesheet("tileset", "./assets/tileset.png", {
             frameWidth: 100,
             frameHeight: 100
         });
-        // this.load.spritesheet("instructions", "./assets/instructions.png", {
-        //     frameWidth: 100,
-        //     frameHeight: 100
-        // });
         this.load.spritesheet("healthBar", "./assets/healthBar.png", {
             frameWidth: 200,
             frameHeight: 50

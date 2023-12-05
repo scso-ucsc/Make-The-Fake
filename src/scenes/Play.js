@@ -25,8 +25,13 @@ class Play extends Phaser.Scene {
 
         //Creating Bugster Barriers
         this.bugsterBarriers = map.createFromObjects("BugsterBarrier");
-        this.bugsterBarriers.map((orange) => {orange.setAlpha(0)});
+        this.bugsterBarriers.map((barrier) => {barrier.setAlpha(0)});
         this.physics.world.enable(this.bugsterBarriers, Phaser.Physics.Arcade.STATIC_BODY);
+
+        //Creating Game Clear Area
+        this.gameClearArea = map.createFromObjects("CompleteArea");
+        this.gameClearArea.map((tile) => {tile.setAlpha(0)});
+        this.physics.world.enable(this.gameClearArea, Phaser.Physics.Arcade.STATIC_BODY);
 
         //Creating Scaffolding Layer
         //getObjectLayer, forEach, new Prefab
@@ -96,11 +101,15 @@ class Play extends Phaser.Scene {
 
         //SCAFFOLD TEST DELETE!!!!!!!!!!!!!!!!!!!!!!
         this.scaffoldTest = new Scaffold(this, 300, 300, "tileset", 2).setOrigin(0);
-        this.physics.add.collider(this.mighty, this.scaffoldTest);
+        this.physics.add.collider(this.mighty.body, this.scaffoldTest);
 
         //Enabling Collision
-        this.physics.add.collider(this.mighty.body, terrainLayer, () => { //Enabling collision between Mighty and terrainLayer & Lets Mighty know he is touching the ground
+        this.physics.add.collider(this.mighty, terrainLayer, () => { //Enabling collision between Mighty and terrainLayer & Lets Mighty know he is touching the ground
             this.mighty.isInAir = false;
+        });
+        this.physics.add.overlap(this.mighty, this.gameClearArea, (mighty) => {
+            this.gameClear = true;
+            mighty.complete = true;
         });
         this.physics.add.collider(this.gummyGroup, this.mighty, (gummy, mighty) => {
             gummy.destroy();
@@ -197,8 +206,10 @@ class Play extends Phaser.Scene {
         this.gummyText = this.add.bitmapText(70, 70, "PressStart", this.gummyCount, 20).setOrigin(0).setTint(0xDDB1D5); //Gummy Count
         this.gummyText.setScrollFactor(0);
         
-        //Paused Features
+        //GAME Clear Features
+        this.gameClearTitle = this.add.sprite(400, 200, "gameClearTitle").setScale(0.25).setOrigin(0.5, 1).setScrollFactor(0).setAlpha(0);
         this.blackOverlay = this.add.rectangle(0, 0, map.widthInPixels, map.heightInPixels, 0x000000).setOrigin(0).setAlpha(0); //Enabling black box for overlay
+        //Paused Features
         this.pausedText = this.add.bitmapText(400, 150, "PressStart", "GAME PAUSED", 50).setOrigin(0.5).setTint(0xDA6AA2).setAlpha(0).setScrollFactor(0);
         let questionConfig = {
             fontFamily: "Verdana",
@@ -234,7 +245,7 @@ class Play extends Phaser.Scene {
             //End Game if Mighty Runs out of Health
             if(this.mighty.health == 0){
                 this.gameOver = true;
-            }
+            };
             //Updating Healthbar based on Mighty's current health
             this.healthBar.setTexture("healthBar", this.mighty.health);
             //Updating Time; Inspired by this formula: https://stackoverflow.com/questions/63870145/phaser-3-create-a-game-clock-with-minutes-and-seconds
@@ -307,6 +318,21 @@ class Play extends Phaser.Scene {
                 }
             }
 
+        } else if(this.gameClear){
+            this.mightyFSM.step();
+            this.gameClearTitle.setAlpha(1);
+            this.tweens.add({
+                targets: this.gameClearTitle,
+                scaleX: 0.5,
+                scaleY: 0.5,
+                ease: "Linear",
+                duration: 100,
+                onComplete: () => {
+                    this.time.delayedCall(5000, () => {
+                        this.scene.start("menuScene");
+                    })
+                }
+            })
         }
     }
 }
