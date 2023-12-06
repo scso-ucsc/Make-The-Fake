@@ -7,7 +7,7 @@ class Mighty extends Phaser.Physics.Arcade.Sprite {
         this.parentScene.physics.add.existing(this); //Adding physics to Mighty in this scene
 
         this.setCollideWorldBounds(true); //Enabling collision with world bounds
-        this.setImmovable(true);
+        //this.setImmovable(true);
 
         //Mighty's properties
         this.health = 10;

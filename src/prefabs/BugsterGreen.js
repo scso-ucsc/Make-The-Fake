@@ -7,7 +7,7 @@ class BugsterGreen extends Phaser.Physics.Arcade.Sprite{
 
         //Setting Bugster Variables
         this.setCollideWorldBounds(true);
-        this.setImmovable(true);
+        //this.setImmovable(true);
         this.setGravityY(100);
         this.body.setSize(this.width / 1.5, this.height / 1.9);
         this.velocity = 100;

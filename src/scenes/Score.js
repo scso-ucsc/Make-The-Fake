@@ -86,6 +86,9 @@ class Score extends Phaser.Scene {
 
         //Creating Keys
         this.keys = this.input.keyboard.createCursorKeys();
+
+        //Controls Text
+        document.getElementById('info').innerHTML = "<strong>CONTROLS:</strong> ARROWS | SPACE | R | ESC"
     }
 
     update(){

@@ -3,7 +3,7 @@
 //From: Kamen Rider Ex-Aid (2016)
 //Genre: 2D Action Platform
 //Phaser Components Used:
-//Time Spent: 37 Hours
+//Time Spent: 38 Hours
 
 'use strict'
 
@@ -12,7 +12,7 @@ let config = {
     width: 800,
     height: 450,
     pixelArt: true,
-    scene: [ Load, Menu, Play, Score ], //Defining scenes
+    scene: [ Load, Menu, Play, Score, Credits ], //Defining scenes
     scale: {
         //mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.HORIZONTALLY,

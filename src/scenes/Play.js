@@ -39,7 +39,6 @@ class Play extends Phaser.Scene {
         this.physics.world.enable(this.gameClearArea, Phaser.Physics.Arcade.STATIC_BODY);
 
         //Creating Scaffolding Layer
-        //getObjectLayer, forEach, new Prefab
         this.scaffoldingGroup = this.physics.add.group();
         this.scaffolding = map.createFromObjects("Scaffold", {
             key: "tileset",
@@ -51,7 +50,7 @@ class Play extends Phaser.Scene {
         });
         //Creating Block Layer
         this.blockGroup = this.add.group();
-        for(let i = 1; i <= 4; i++){
+        for(let i = 1; i <= 9; i++){
             let blockSpawn = map.findObject("BlockSpawn", obj => obj.name === "block" + i.toString());
             this.block = new Block(this, blockSpawn.x, blockSpawn.y - 25, "blockTile");
             this.blockGroup.add(this.block);
@@ -104,10 +103,6 @@ class Play extends Phaser.Scene {
             this.greenGroup.add(this.green);
         }
 
-        //SCAFFOLD TEST DELETE!!!!!!!!!!!!!!!!!!!!!!
-        this.scaffoldTest = new Scaffold(this, 300, 300, "tileset", 2).setOrigin(0);
-        this.physics.add.collider(this.mighty.body, this.scaffoldTest);
-
         //Enabling Collision
         this.physics.add.collider(this.mighty, terrainLayer, () => { //Enabling collision between Mighty and terrainLayer & Lets Mighty know he is touching the ground
             this.mighty.isInAir = false;
@@ -119,7 +114,7 @@ class Play extends Phaser.Scene {
             this.gameClear = true;
             mighty.complete = true;
         });
-        this.physics.add.collider(this.gummyGroup, this.mighty, (gummy, mighty) => {
+        this.physics.add.overlap(this.gummyGroup, this.mighty, (gummy, mighty) => {
             this.sound.play("eat");
             gummy.destroy();
             mighty.speed += 1;
@@ -178,45 +173,28 @@ class Play extends Phaser.Scene {
             scaffold.body.checkCollision.down = false;
             scaffold.body.checkCollision.left = false;
             scaffold.body.checkCollision.right = false;
-            scaffold.body.checkCollision.up = true;
-            this.physics.add.collider(scaffold, this.mighty);
+            this.physics.add.collider(this.mighty, scaffold, () => {
+                console.log("Collision Detected") //DELETE
+                this.mighty.isInAir = false;
+            });
         });
         this.orangeGroup.children.each((child) => {
             this.physics.add.collider(child, terrainLayer);
+            this.physics.add.collider(child, this.scaffoldingGroup);
         });
         this.yellowGroup.children.each((child) => {
             this.physics.add.collider(child, terrainLayer);
+            this.physics.add.collider(child, this.scaffoldingGroup);
         });
         this.greenGroup.children.each((child) => {
             this.physics.add.collider(child, terrainLayer);
+            this.physics.add.collider(child, this.scaffoldingGroup);
         });
-        this.blockGroup.children.each((child) => {
-            this.physics.add.collider(child, terrainLayer);
-        });
-        this.physics.add.collider(this.mighty, this.blocks); //WORK ON
         this.physics.add.collider(this.mighty, this.blockGroup, (mighty, block) =>{
             if(mighty.isAttacking == true){
-                this.sound.play("boxBreak");
-                let boxBreak = this.add.sprite(block.x - 75, block.y - 75, "box", 1).setOrigin(0);
-                block.destroy();
-                boxBreak.anims.play("box-break");
-                boxBreak.on("animationcomplete", () => {
-                    boxBreak.destroy();
-                });
+                block.break();
             }
         });
-
-        //TESTS
-        this.test = this.physics.add.sprite(400 - 25, 400 -25, "box", 0).setOrigin(0);
-        this.test.body.setImmovable(true);
-        this.test2 = this.physics.add.sprite(400 - 25, 400 -325, "box", 0).setOrigin(0);
-        this.test2.body.setImmovable(true);
-        this.test2.body.setCollideWorldBounds(true);
-        this.test2.body.setVelocityY(50);
-        this.physics.add.collider(this.test, this.test2)
-        // this.physics.add.collider(this.mighty, test, ()=> {
-        //     console.log("collision successful")
-        // });
 
         //Camera manipulation
         this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels); //Setting camera bounds
@@ -267,8 +245,8 @@ class Play extends Phaser.Scene {
         this.gameOverText = this.add.bitmapText(400, 150, "PressStart", "GAME OVER", 50).setOrigin(0.5).setTint(0xDA6AA2).setAlpha(0).setScrollFactor(0);
         this.gameOverQuestion = this.add.text(400, 225, "RESTART?", questionConfig).setOrigin(0.5).setAlpha(0).setScrollFactor(0);
 
-        //Instructions
-        //document.getElementById('info').innerHTML = '<strong>MightyFSM.js:</strong> Arrows: move | SPACE: jump | R: attack | H: hurt'
+        //Controls Text
+        document.getElementById('info').innerHTML = "<strong>CONTROLS:</strong> ARROWS | SPACE | R | ESC"
     }
 
     update(){

@@ -75,11 +75,15 @@ class Menu extends Phaser.Scene {
                 }
             });
         })
+
+        //Controls Text
+        document.getElementById('info').innerHTML = "<strong>CONTROLS:</strong> ARROWS | SPACE | R | ESC"
     }
 
     update(){
-        this.sound.stopAll();
-        this.scene.start("playScene") //FOR TESTING
+        // this.sound.stopAll();
+        // this.scene.start("playScene") //FOR TESTING
+        //this.scene.start("creditsScene") //FOR TESTING
 
         if(this.playerChoice == "play"){
             if(Phaser.Input.Keyboard.JustDown(keyDOWN)){

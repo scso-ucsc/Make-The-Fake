@@ -197,6 +197,9 @@ class Load extends Phaser.Scene {
             frames: this.anims.generateFrameNumbers("box", {start: 1, end: 5})
         })
 
+        //Controls Text
+        document.getElementById('info').innerHTML = "<strong>CONTROLS:</strong> ARROWS | SPACE | R | ESC"
+        
         this.scene.start("menuScene");
     }
 }
