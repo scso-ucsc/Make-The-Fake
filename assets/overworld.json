@@ -1196,7 +1196,6 @@
         {
          "draworder":"topdown",
          "id":6,
-         "locked":true,
          "name":"MightySpawn",
          "objects":[
                 {
@@ -1771,6 +1770,7 @@
         {
          "draworder":"topdown",
          "id":17,
+         "locked":true,
          "name":"BlockSpawn",
          "objects":[
                 {

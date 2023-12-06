@@ -2,12 +2,13 @@
 //Game Title: Mighty Action X
 //From: Kamen Rider Ex-Aid (2016)
 //Genre: 2D Action Platform
-//Phaser Components Used:
-//Time Spent: 38 Hours
+//Major Phaser Components Used: Cameras, Physics Systems, Text Objects, Tweens Manager, Tilemap, Animation Manager, Timers
+//Time Spent: 40 Hours
 
 'use strict'
 
 let config = {
+    parent: "phaser-game",
     type: Phaser.AUTO,
     width: 800,
     height: 450,
@@ -15,7 +16,7 @@ let config = {
     scene: [ Load, Menu, Play, Score, Credits ], //Defining scenes
     scale: {
         //mode: Phaser.Scale.FIT,
-        autoCenter: Phaser.Scale.HORIZONTALLY,
+        //autoCenter: Phaser.Scale.HORIZONTALLY,
     },
     physics: {
         default: "arcade",

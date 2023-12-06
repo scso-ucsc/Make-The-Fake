@@ -276,7 +276,7 @@
   <object id="165" gid="27" x="8200" y="700" width="100" height="100"/>
   <object id="166" gid="27" x="8200" y="800" width="100" height="100"/>
  </objectgroup>
- <objectgroup id="6" name="MightySpawn" locked="1">
+ <objectgroup id="6" name="MightySpawn">
   <object id="156" name="spawnpoint" x="50" y="375">
    <point/>
   </object>
@@ -370,7 +370,7 @@
  <objectgroup id="15" name="CompleteArea" locked="1">
   <object id="251" name="CompleteArea" x="10400" y="0" width="800" height="900"/>
  </objectgroup>
- <objectgroup id="17" name="BlockSpawn">
+ <objectgroup id="17" name="BlockSpawn" locked="1">
   <object id="256" name="block1" x="2350" y="375">
    <point/>
   </object>

@@ -104,9 +104,7 @@ class Play extends Phaser.Scene {
         }
 
         //Enabling Collision
-        this.physics.add.collider(this.mighty, terrainLayer, () => { //Enabling collision between Mighty and terrainLayer & Lets Mighty know he is touching the ground
-            this.mighty.isInAir = false;
-        });
+        this.physics.add.collider(this.mighty, terrainLayer); //Enabling collision between Mighty and terrainLayer
         this.physics.add.overlap(this.mighty, this.gameClearArea, (mighty) => {
             if(this.gameClear == false){ //Play "Game Clear Sound Once"
                 this.sound.play("gameClearSound");
@@ -178,6 +176,8 @@ class Play extends Phaser.Scene {
                 this.mighty.isInAir = false;
             });
         });
+        //gameObject.body.blocked.top/bottom/left/right
+        //gameObject.body.touching
         this.orangeGroup.children.each((child) => {
             this.physics.add.collider(child, terrainLayer);
             this.physics.add.collider(child, this.scaffoldingGroup);
