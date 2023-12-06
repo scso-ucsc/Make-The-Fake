@@ -83,6 +83,7 @@ class Load extends Phaser.Scene {
         this.load.audio("select", "./assets/sfx/select.wav");
         this.load.audio("boxBreak", "./assets/sfx/boxBreak.wav");
         this.load.audio("intro", "./assets/sfx/intro.wav");
+        this.load.audio("scoreComplete", "./assets/sfx/scoreComplete.wav");
     }
 
     create(){

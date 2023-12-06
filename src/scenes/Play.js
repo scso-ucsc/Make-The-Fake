@@ -8,6 +8,8 @@ class Play extends Phaser.Scene {
         this.sound.play("playAudio", audioConfig);
 
         //Initializing Variables
+        gummiesCollected = 0;
+        enemiesDefeated = 0;
         this.gummyCount = 0;
         this.gamePaused = false;
         this.gameClear = false;
@@ -128,6 +130,7 @@ class Play extends Phaser.Scene {
                 var orangeRandomVal = Phaser.Math.Between(1, 3);
                 this.sound.play("bugsterHurt" + orangeRandomVal);
                 orange.destroy();
+                enemiesDefeated += 1;
                 return;
             }
             if(mighty.immune == false){
@@ -147,11 +150,12 @@ class Play extends Phaser.Scene {
                 return;
             };
         });
-        this.physics.add.overlap(this.mighty, this.greenGroup, (mighty, green) => { //Mighty and Orange Bugsters Interaction
+        this.physics.add.overlap(this.mighty, this.greenGroup, (mighty, green) => { //Mighty and Green Bugsters Interaction
             if(mighty.isAttacking == true){
                 var greenRandomVal = Phaser.Math.Between(1, 3);
                 this.sound.play("bugsterHurt" + greenRandomVal);
                 green.destroy();
+                enemiesDefeated += 1;
                 return;
             }
             if(mighty.immune == false){
@@ -281,6 +285,7 @@ class Play extends Phaser.Scene {
                 secondExtraZero = "";
             }
             this.timeClock.text = minuteExtraZero + minuteVal.toString() + ":" + secondExtraZero + secondVal.toString();
+            totalTime = this.timeClock.text; //For Score
             //Updating Gummy Count
             this.gummyText.text = this.gummyCount;
             //Updating Mighty
@@ -346,6 +351,7 @@ class Play extends Phaser.Scene {
             }
 
         } else if(this.gameClear){
+            gummiesCollected = this.gummyCount;
             this.mightyFSM.step();
             this.gameClearTitle.setAlpha(1);
             this.tweens.add({

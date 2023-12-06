@@ -49,6 +49,7 @@ class BugsterYellow extends Phaser.Physics.Arcade.Sprite{
         this.immune = true;
         if(this.life == 0){
             this.destroy();
+            enemiesDefeated += 1;
         } else{
             this.scene.time.delayedCall(500, () => {this.immune = false});
             switch(this.direction){

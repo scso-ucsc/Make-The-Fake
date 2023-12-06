@@ -12,7 +12,7 @@ let config = {
     width: 800,
     height: 450,
     pixelArt: true,
-    scene: [ Load, Menu, Play ], //Defining scenes
+    scene: [ Load, Menu, Play, Score ], //Defining scenes
     physics: {
         default: "arcade",
         arcade: {
@@ -34,7 +34,10 @@ let canvasHeight = 450;
 let audioConfig = { //For Music
     volume: 0.5,
     loop: true //Allows looping of track
-}
+};
+let gummiesCollected = 0;
+let enemiesDefeated = 0;
+let totalTime = "";
 
 //Creating Keyboard Variables
 let keyLEFT, keyRIGHT, keyUP, keyDOWN, keySPACE, keyR, keyESC;
