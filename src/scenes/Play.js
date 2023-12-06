@@ -197,7 +197,7 @@ class Play extends Phaser.Scene {
         this.physics.add.collider(this.mighty, this.blockGroup, (mighty, block) =>{
             if(mighty.isAttacking == true){
                 this.sound.play("boxBreak");
-                let boxBreak = this.add.sprite(block.x - 50, block.y - 50, "box", 1).setOrigin(0);
+                let boxBreak = this.add.sprite(block.x - 75, block.y - 75, "box", 1).setOrigin(0);
                 block.destroy();
                 boxBreak.anims.play("box-break");
                 boxBreak.on("animationcomplete", () => {
@@ -205,6 +205,18 @@ class Play extends Phaser.Scene {
                 });
             }
         });
+
+        //TESTS
+        this.test = this.physics.add.sprite(400 - 25, 400 -25, "box", 0).setOrigin(0);
+        this.test.body.setImmovable(true);
+        this.test2 = this.physics.add.sprite(400 - 25, 400 -325, "box", 0).setOrigin(0);
+        this.test2.body.setImmovable(true);
+        this.test2.body.setCollideWorldBounds(true);
+        this.test2.body.setVelocityY(50);
+        this.physics.add.collider(this.test, this.test2)
+        // this.physics.add.collider(this.mighty, test, ()=> {
+        //     console.log("collision successful")
+        // });
 
         //Camera manipulation
         this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels); //Setting camera bounds
@@ -362,7 +374,7 @@ class Play extends Phaser.Scene {
                 duration: 100,
                 onComplete: () => {
                     this.time.delayedCall(5000, () => {
-                        this.scene.start("menuScene");
+                        this.scene.start("scoreScene");
                         this.sound.stopAll();
                     })
                 }

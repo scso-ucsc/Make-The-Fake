@@ -50,8 +50,8 @@ class Load extends Phaser.Scene {
             frameHeight: 100
         });
         this.load.spritesheet("box", "./assets/box.png", { //Loading breakable box
-            frameWidth: 100,
-            frameHeight: 100
+            frameWidth: 150,
+            frameHeight: 150
         })
 
         //Loading TileMap

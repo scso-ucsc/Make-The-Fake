@@ -5,7 +5,7 @@ class Score extends Phaser.Scene {
 
     create(){
         //Playing Audio
-        //this.sound.play("creditsAudio")
+        this.sound.play("creditsAudio")
 
         //Variables
         this.nextSceneChoice = "menu";
@@ -23,7 +23,7 @@ class Score extends Phaser.Scene {
         this.add.bitmapText(100, 200, "PressStart", "TOTAL TIME:", 25).setOrigin(0, 0.5).setTint(0xDA6AA2);
         this.add.bitmapText(700, 200, "PressStart", totalTime, 25).setOrigin(1, 0.5).setTint(0xDDDDDD);
         this.add.bitmapText(100, 250, "PressStart", "GUMMIES COLLECTED:", 25).setOrigin(0, 0.5).setTint(0xDA6AA2);
-        this.add.bitmapText(700, 250, "PressStart", "/54", 25).setOrigin(1, 0.5).setTint(0xDA6AA2);
+        this.add.bitmapText(700, 250, "PressStart", "/55", 25).setOrigin(1, 0.5).setTint(0xDA6AA2);
         this.gummiesTweenText = this.add.bitmapText(625, 250, "PressStart", 0, 25).setOrigin(1, 0.5).setTint(0xDDDDDD);
         this.add.bitmapText(100, 300, "PressStart", "BUGSTERS DEFEATED:", 25).setOrigin(0, 0.5).setTint(0xDA6AA2);
         this.add.bitmapText(700, 300, "PressStart", "/18", 25).setOrigin(1, 0.5).setTint(0xDA6AA2);
@@ -42,7 +42,7 @@ class Score extends Phaser.Scene {
         this.replayText = this.add.text(500, 420, "REPLAY", textConfig).setOrigin(0.5).setScrollFactor(0).setScale(0.85).setAlpha(0.5);
 
         //Calculating Player Score and Display Results
-        let playerScore = (gummiesCollected + enemiesDefeated) / 72;
+        let playerScore = (gummiesCollected + enemiesDefeated) / 73;
         this.perfectScoreText = this.add.bitmapText(400, 360, "PressStart", "PERFECT!", 50).setOrigin(0.5).setTint(0x33cc33).setAlpha(0);
         this.greatScoreText = this.add.bitmapText(400, 360, "PressStart", "GREAT!", 50).setOrigin(0.5).setTint(0x993399).setAlpha(0);
         this.okScoreText = this.add.bitmapText(400, 360, "PressStart", "OK!", 50).setOrigin(0.5).setTint(0xff9933).setAlpha(0);
