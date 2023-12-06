@@ -4,6 +4,9 @@ class Menu extends Phaser.Scene {
     }
 
     create(){
+        //Playing Music
+        this.sound.play("menuAudio", audioConfig);
+
         //Creating Variables
         this.playerChoice = "play";
 
@@ -39,6 +42,7 @@ class Menu extends Phaser.Scene {
             ease: "Linear",
             duration: 250,
         });
+        this.sound.play("intro");
 
         //Adding black overlay
         this.time.delayedCall(1000, () => {
@@ -74,11 +78,12 @@ class Menu extends Phaser.Scene {
     }
 
     update(){
-        this.scene.start("playScene") //FOR TESTING
+        //this.scene.start("playScene") //FOR TESTING
 
         if(this.playerChoice == "play"){
             if(Phaser.Input.Keyboard.JustDown(keyDOWN)){
                 this.playerChoice = "credits";
+                this.sound.play("switch1")
                 //this.playTextOff.play();
                 this.tweens.add({
                     targets: this.playText,
@@ -98,6 +103,7 @@ class Menu extends Phaser.Scene {
                     ease: "Linear"
                 });
             } else if(Phaser.Input.Keyboard.JustDown(keySPACE)){
+                this.sound.play("select");
                 this.tweens.chain({
                     targets: this.playText,
                     loop: 1,
@@ -120,7 +126,10 @@ class Menu extends Phaser.Scene {
                             targets: this.transitionOverlay,
                             alpha: 1,
                             duration: 2000,
-                            onComplete: () => {this.scene.start("playScene");}
+                            onComplete: () => {
+                                this.sound.stopAll();
+                                this.scene.start("playScene");
+                            }
                         })
                     }
                 });
@@ -128,6 +137,7 @@ class Menu extends Phaser.Scene {
         } else{ //this.playerChoice == "credits"
             if(Phaser.Input.Keyboard.JustDown(keyUP)){
                 this.playerChoice = "play";
+                this.sound.play("switch1")
                 //this.playTextOn.play();
                 this.tweens.add({
                     targets: this.playText,
@@ -147,6 +157,7 @@ class Menu extends Phaser.Scene {
                     ease: "Linear"
                 });
             } else if(Phaser.Input.Keyboard.JustDown(keySPACE)){
+                this.sound.play("select");
                 this.tweens.chain({
                     targets: this.creditsText,
                     loop: 1,

@@ -4,6 +4,9 @@ class Play extends Phaser.Scene {
     }
 
     create(){
+        //Playing Music
+        this.sound.play("playAudio", audioConfig);
+
         //Initializing Variables
         this.gummyCount = 0;
         this.gamePaused = false;
@@ -108,16 +111,22 @@ class Play extends Phaser.Scene {
             this.mighty.isInAir = false;
         });
         this.physics.add.overlap(this.mighty, this.gameClearArea, (mighty) => {
+            if(this.gameClear == false){ //Play "Game Clear Sound Once"
+                this.sound.play("gameClearSound");
+            };
             this.gameClear = true;
             mighty.complete = true;
         });
         this.physics.add.collider(this.gummyGroup, this.mighty, (gummy, mighty) => {
+            this.sound.play("eat");
             gummy.destroy();
             mighty.speed += 1;
             this.gummyCount += 1;
         });
         this.physics.add.overlap(this.mighty, this.orangeGroup, (mighty, orange) => { //Mighty and Orange Bugsters Interaction
             if(mighty.isAttacking == true){
+                var orangeRandomVal = Phaser.Math.Between(1, 3);
+                this.sound.play("bugsterHurt" + orangeRandomVal);
                 orange.destroy();
                 return;
             }
@@ -128,6 +137,8 @@ class Play extends Phaser.Scene {
         });
         this.physics.add.overlap(this.mighty, this.yellowGroup, (mighty, yellow) => { //Mighty and Yellow Bugsters Interaction
             if(mighty.isAttacking == true && yellow.immune == false){
+                var yellowRandomVal = Phaser.Math.Between(1, 3);
+                this.sound.play("bugsterHurt" + yellowRandomVal);
                 yellow.hit();
                 return;
             }
@@ -138,6 +149,8 @@ class Play extends Phaser.Scene {
         });
         this.physics.add.overlap(this.mighty, this.greenGroup, (mighty, green) => { //Mighty and Orange Bugsters Interaction
             if(mighty.isAttacking == true){
+                var greenRandomVal = Phaser.Math.Between(1, 3);
+                this.sound.play("bugsterHurt" + greenRandomVal);
                 green.destroy();
                 return;
             }
@@ -179,7 +192,13 @@ class Play extends Phaser.Scene {
         this.physics.add.collider(this.mighty, this.blocks); //WORK ON
         this.physics.add.collider(this.mighty, this.blockGroup, (mighty, block) =>{
             if(mighty.isAttacking == true){
-                block.break();
+                this.sound.play("boxBreak");
+                let boxBreak = this.add.sprite(block.x - 50, block.y - 50, "box", 1).setOrigin(0);
+                block.destroy();
+                boxBreak.anims.play("box-break");
+                boxBreak.on("animationcomplete", () => {
+                    boxBreak.destroy();
+                });
             }
         });
 
@@ -244,6 +263,7 @@ class Play extends Phaser.Scene {
             };
             //End Game if Mighty Runs out of Health
             if(this.mighty.health == 0){
+                this.sound.play("gameOverSound");
                 this.gameOver = true;
             };
             //Updating Healthbar based on Mighty's current health
@@ -274,15 +294,18 @@ class Play extends Phaser.Scene {
                 this.noText.setAlpha(0.5).setScale(0.85);
                 if(Phaser.Input.Keyboard.JustDown(this.keys.right)){
                     this.pauseChoice = "no";
+                    this.sound.play("switch2");
                 }
                 if(Phaser.Input.Keyboard.JustDown(this.keys.space)){
                     this.scene.start("menuScene")
+                    this.sound.stopAll();
                 }
             } else{ //this.pauseChoice == "no";
                 this.yesText.setAlpha(0.5).setScale(0.85);
                 this.noText.setAlpha(1).setScale(1);
                 if(Phaser.Input.Keyboard.JustDown(this.keys.left)){
                     this.pauseChoice = "yes";
+                    this.sound.play("switch2");
                 }
                 if(Phaser.Input.Keyboard.JustDown(this.keys.space)){
                     this.pauseChoice = "yes";
@@ -303,18 +326,22 @@ class Play extends Phaser.Scene {
                 this.noText.setAlpha(0.5).setScale(0.85);
                 if(Phaser.Input.Keyboard.JustDown(this.keys.right)){
                     this.pauseChoice = "no";
+                    this.sound.play("switch2");
                 }
                 if(Phaser.Input.Keyboard.JustDown(this.keys.space)){
                     this.scene.restart();
+                    this.sound.stopAll();
                 }
             } else{ //this.pauseChoice == "no";
                 this.yesText.setAlpha(0.5).setScale(0.85);
                 this.noText.setAlpha(1).setScale(1);
                 if(Phaser.Input.Keyboard.JustDown(this.keys.left)){
                     this.pauseChoice = "yes";
+                    this.sound.play("switch2");
                 }
                 if(Phaser.Input.Keyboard.JustDown(this.keys.space)){
                     this.scene.start("menuScene")
+                    this.sound.stopAll();
                 }
             }
 
@@ -330,6 +357,7 @@ class Play extends Phaser.Scene {
                 onComplete: () => {
                     this.time.delayedCall(5000, () => {
                         this.scene.start("menuScene");
+                        this.sound.stopAll();
                     })
                 }
             })

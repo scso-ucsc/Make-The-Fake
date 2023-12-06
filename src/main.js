@@ -3,7 +3,7 @@
 //From: Kamen Rider Ex-Aid (2016)
 //Genre: 2D Action Platform
 //Phaser Components Used:
-//Time Spent: 33 Hours
+//Time Spent: 35 Hours
 
 'use strict'
 
@@ -31,6 +31,10 @@ const game = new Phaser.Game(config);
 //Creating Variables
 let canvasWidth = 800;
 let canvasHeight = 450;
+let audioConfig = { //For Music
+    volume: 0.5,
+    loop: true //Allows looping of track
+}
 
 //Creating Keyboard Variables
 let keyLEFT, keyRIGHT, keyUP, keyDOWN, keySPACE, keyR, keyESC;

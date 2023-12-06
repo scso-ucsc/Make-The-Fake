@@ -62,6 +62,27 @@ class Load extends Phaser.Scene {
         //Loading BitMap Text
         //Font From: https://www.1001fonts.com/press-start-font.html
         this.load.bitmapFont("PressStart", "./assets/PressStartK.png", "./assets/PressStartK.xml");
+
+        //Loading Audio
+        this.load.audio("playAudio", "./assets/Blip Stream.wav"); //Music by Kevin Macleod: https://youtu.be/9np9KK4ccuA?si=d2mDKyURkvU5YtKb
+        this.load.audio("menuAudio", "./assets/Rhinoceros.wav"); //Music by Kevin Macleod: https://youtu.be/_DOQuVH4eeg?si=JtTktUsy2nNyo5tW
+        this.load.audio("creditsAudio", "./assets/Show Your Moves.wav"); //Music by Kevin Macleod: https://youtu.be/9np9KK4ccuA?si=d2mDKyURkvU5YtKb
+        this.load.audio("jump1", "./assets/sfx/jump1.wav");
+        this.load.audio("jump2", "./assets/sfx/jump2.wav");
+        this.load.audio("jump3", "./assets/sfx/jump3.wav");
+        this.load.audio("mightyHurt", "./assets/sfx/mightyHurt.wav");
+        this.load.audio("bugsterHurt1", "./assets/sfx/bugsterHurt1.wav");
+        this.load.audio("bugsterHurt2", "./assets/sfx/bugsterHurt2.wav");
+        this.load.audio("bugsterHurt3", "./assets/sfx/bugsterHurt3.wav");
+        this.load.audio("eat", "./assets/sfx/eat.wav");
+        this.load.audio("attack", "./assets/sfx/attack.wav");
+        this.load.audio("gameOverSound", "./assets/sfx/Game Over.wav"); //Sound from Kamen Rider Ex-Aid: https://www.youtube.com/watch?v=0KoLVvY6rmo
+        this.load.audio("gameClearSound", "./assets/sfx/Game Clear.wav"); //Sound from Kamen Rider Ex-Aid: https://www.youtube.com/watch?v=0SjPvdj2Cjs
+        this.load.audio("switch1", "./assets/sfx/switch1.wav");
+        this.load.audio("switch2", "./assets/sfx/switch2.wav");
+        this.load.audio("select", "./assets/sfx/select.wav");
+        this.load.audio("boxBreak", "./assets/sfx/boxBreak.wav");
+        this.load.audio("intro", "./assets/sfx/intro.wav");
     }
 
     create(){

@@ -127,6 +127,7 @@ class RunState extends State {
 
 class AttackState extends State{
     enter(scene, mighty){
+        scene.sound.play("attack");
         mighty.isAttacking = true;
         mighty.setVelocityX(0);
         mighty.setSize(mighty.width / 1.2, mighty.height / 1.8);
@@ -168,6 +169,8 @@ class JumpState extends State{
         mighty.setVelocityX(0); //Reset
         mighty.setVelocityY(-300);
         mighty.isInAir = true;
+        var randomVal = Phaser.Math.Between(1, 3);
+        scene.sound.play("jump" + randomVal);
     }
 
     execute(scene, mighty){
@@ -244,6 +247,7 @@ class FallState extends State{
 
 class HurtState extends State{
     enter(scene, mighty){
+        scene.sound.play("mightyHurt");
         mighty.health -= 1;
         mighty.setVelocity(0);
         mighty.anims.play(`hurt-${mighty.direction}`);
