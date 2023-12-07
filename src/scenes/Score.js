@@ -100,8 +100,8 @@ class Score extends Phaser.Scene {
                 this.sound.play("switch2");
             }
             if(Phaser.Input.Keyboard.JustDown(this.keys.space)){
-                this.scene.start("menuScene")
                 this.sound.stopAll();
+                this.scene.start("menuScene")
             }
         } else{ //this.nextSceneChoice == "replay";
             this.menuText.setAlpha(0.5).setScale(0.85);
@@ -111,8 +111,8 @@ class Score extends Phaser.Scene {
                 this.sound.play("switch2");
             }
             if(Phaser.Input.Keyboard.JustDown(this.keys.space)){
-                this.scene.start("playScene")
                 this.sound.stopAll();
+                this.scene.start("playScene");
             }
         }
     }

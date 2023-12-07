@@ -9,6 +9,7 @@ class Menu extends Phaser.Scene {
 
         //Creating Variables
         this.playerChoice = "play";
+        this.playSelected = false;
 
         //Defining Keys
         keyUP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
@@ -81,9 +82,9 @@ class Menu extends Phaser.Scene {
     }
 
     update(){
-        this.sound.stopAll();
-        this.scene.start("playScene") //FOR TESTING
-        //this.scene.start("creditsScene") //FOR TESTING
+        // this.sound.stopAll();
+        // // this.scene.start("playScene") //FOR TESTING
+        // this.scene.start("creditsScene") //FOR TESTING
 
         if(this.playerChoice == "play"){
             if(Phaser.Input.Keyboard.JustDown(keyDOWN)){
@@ -107,7 +108,8 @@ class Menu extends Phaser.Scene {
                     duration: 200,
                     ease: "Linear"
                 });
-            } else if(Phaser.Input.Keyboard.JustDown(keySPACE)){
+            } else if(Phaser.Input.Keyboard.JustDown(keySPACE) && this.playSelected == false){
+                this.playSelected = true;
                 this.sound.play("select");
                 this.tweens.chain({
                     targets: this.playText,
@@ -161,7 +163,8 @@ class Menu extends Phaser.Scene {
                     duration: 200,
                     ease: "Linear"
                 });
-            } else if(Phaser.Input.Keyboard.JustDown(keySPACE)){
+            } else if(Phaser.Input.Keyboard.JustDown(keySPACE) && this.playSelected == false){
+                this.playSelected = true;
                 this.sound.play("select");
                 this.tweens.chain({
                     targets: this.creditsText,
@@ -181,7 +184,15 @@ class Menu extends Phaser.Scene {
                         }
                     ],
                     onComplete: () => {
-                        console.log("Credits selected") //REPLACE SOON
+                        this.tweens.add({
+                            targets: this.transitionOverlay,
+                            alpha: 1,
+                            duration: 1000,
+                            onComplete: () => {
+                                this.sound.stopAll();
+                                this.scene.start("creditsScene");
+                            }
+                        })
                     }
                 });
             }

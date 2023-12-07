@@ -14,10 +14,9 @@ class Mighty extends Phaser.Physics.Arcade.Sprite {
         this.direction = direction;
         this.speed = 250;
         this.gravity = 300
-        this.hurtTimer = 1500; //In ms
+        this.hurtTimer = 1250; //In ms
         this.setGravityY(this.gravity); //Applying gravity
         this.body.setSize(this.width / 1.5, this.height / 1.8);
-        this.isInAir = false;
         this.immune = false;
         this.isAttacking = false;
         this.complete = false;
@@ -39,7 +38,6 @@ class IdleState extends State {
     enter(scene, mighty) {
         mighty.setVelocityX(0); //Reset
         mighty.anims.play(`idle-${mighty.direction}`);
-        mighty.isInAir = false;
     }
 
     execute(scene, mighty) {
@@ -48,11 +46,9 @@ class IdleState extends State {
         const keyR = scene.keys.keyR; //Bounding to enable R key
 
         //Transition to jump if space is pressed
-        if(Phaser.Input.Keyboard.JustDown(space)){
-            if(mighty.body.touching.down == true || mighty.body.blocked.down == true){
-                this.stateMachine.transition("jump");
-                return;
-            }
+        if(Phaser.Input.Keyboard.JustDown(space) && (mighty.body.touching.down == true || mighty.body.blocked.down == true)){
+            this.stateMachine.transition("jump");
+            return;
         }
 
         //Transition to attack if r is pressed
@@ -80,7 +76,7 @@ class IdleState extends State {
         }
 
         //Transition to fall if velocity.y > 0
-        if(mighty.body.velocity.y > 0 && (mighty.body.touching.down == true || mighty.body.blocked.down == true)){
+        if(mighty.body.velocity.y > 0){
             this.stateMachine.transition("fall");
             return;
         }
@@ -120,12 +116,18 @@ class RunState extends State {
         }
 
         //Transition to jump
-        if(Phaser.Input.Keyboard.JustDown(space)){
-            if(mighty.body.touching.down == true || mighty.body.blocked.down == true){
-                this.stateMachine.transition('jump');
-                return;
-            }
+        if(Phaser.Input.Keyboard.JustDown(space) || mighty.body.velocity.y < 0){
+            this.stateMachine.transition('jump');
+            return;
         }
+
+        //Transition to fall if velocity.y > 0
+        if(mighty.body.velocity.y > 0){
+            this.stateMachine.transition("fall");
+            return;
+        }
+
+        console.log("RUN STATE"); //DELETE
 
         //Executing Movement
         if(left.isDown) {
@@ -141,7 +143,7 @@ class RunState extends State {
 
 class AttackState extends State{
     enter(scene, mighty){
-        mighty.setSize(mighty.width / 1.2, mighty.height / 1.8); //BUG THAT ENABLES CLIP THROUGH OF TERRAIN
+        //mighty.setSize(mighty.width / 1.1, mighty.height / 1.8); //BUG THAT ENABLES CLIP THROUGH OF TERRAIN
         scene.sound.play("attack");
         mighty.isAttacking = true;
         mighty.setVelocityX(0);
@@ -150,9 +152,13 @@ class AttackState extends State{
             mighty.isAttacking = false;
             mighty.setSize(mighty.width / 1.5, mighty.height / 1.8); //Returning bounds
             if(mighty.body.touching.down == true || mighty.body.blocked.down == true){ 
+                mighty.body.setSize(mighty.width / 1.5, mighty.height / 1.8);
                 this.stateMachine.transition("idle");
+                return;
             } else{
+                mighty.body.setSize(mighty.width / 1.5, mighty.height / 1.8);
                 this.stateMachine.transition("fall");
+                return;
             }
         });
     }
@@ -176,8 +182,7 @@ class AttackState extends State{
 class JumpState extends State{
     enter(scene, mighty){
         mighty.setVelocityX(0); //Reset
-        mighty.setVelocityY(-300);
-        mighty.isInAir = true;
+        mighty.setVelocityY(-250);
         var randomVal = Phaser.Math.Between(1, 3);
         scene.sound.play("jump" + randomVal);
     }
@@ -185,7 +190,6 @@ class JumpState extends State{
     execute(scene, mighty){
         const { left, right } = scene.keys;
         const keyR = scene.keys.keyR; //Bounding to enable R key
-        mighty.anims.play(`jump-${mighty.direction}`, true); 
 
         if(Phaser.Input.Keyboard.JustDown(keyR)){
             mighty.setVelocityY(0);
@@ -204,6 +208,8 @@ class JumpState extends State{
             return;
         }
 
+        //console.log("JUMP STATE"); //DELETE
+
         //Executing Movement
         if(left.isDown) {
             mighty.direction = "left";
@@ -214,6 +220,7 @@ class JumpState extends State{
         } else{ //Neither left or right being pressed
             mighty.setVelocityX(0);
         }
+        mighty.anims.play(`jump-${mighty.direction}`, true); 
 
         if(mighty.body.touching.down == true || mighty.body.blocked.down == true){
             this.stateMachine.transition("idle");
@@ -262,7 +269,7 @@ class HurtState extends State{
         mighty.anims.play(`hurt-${mighty.direction}`);
         scene.time.delayedCall(mighty.hurtTimer, () => {
             mighty.immune = false;
-            if(mighty.isInAir == false){
+            if(mighty.body.touching.down == true || mighty.body.blocked.down == true){
                 this.stateMachine.transition("idle");
             } else{
                 this.stateMachine.transition("fall");

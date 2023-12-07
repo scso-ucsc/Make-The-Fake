@@ -171,10 +171,7 @@ class Play extends Phaser.Scene {
             scaffold.body.checkCollision.down = false;
             scaffold.body.checkCollision.left = false;
             scaffold.body.checkCollision.right = false;
-            this.physics.add.collider(this.mighty, scaffold, () => {
-                console.log("Collision Detected") //DELETE
-                this.mighty.isInAir = false;
-            });
+            this.physics.add.collider(this.mighty, scaffold);
         });
         //gameObject.body.blocked.top/bottom/left/right
         //gameObject.body.touching
