@@ -48,6 +48,7 @@ class Play extends Phaser.Scene {
         this.scaffolding.forEach((scaffold) => {
             this.scaffoldingGroup.add(scaffold);
         });
+
         //Creating Block Layer
         this.blockGroup = this.add.group();
         for(let i = 1; i <= 9; i++){
@@ -55,11 +56,6 @@ class Play extends Phaser.Scene {
             this.block = new Block(this, blockSpawn.x, blockSpawn.y - 25, "blockTile");
             this.blockGroup.add(this.block);
         };
-
-        //Enabling collisions based on tilemap
-        terrainLayer.setCollisionByProperty({ //Acquiring properties of terrain layer
-            collides: true //If collides is true on that tile, collide
-        });
 
         //Creating Gummy Group
         this.gummies = map.createFromObjects("Gummies", {
@@ -104,6 +100,9 @@ class Play extends Phaser.Scene {
         }
 
         //Enabling Collision
+        terrainLayer.setCollisionByProperty({ //Acquiring properties of terrain layer
+            collides: true //If collides is true on that tile, collide
+        });
         this.physics.add.collider(this.mighty, terrainLayer); //Enabling collision between Mighty and terrainLayer
         this.physics.add.overlap(this.mighty, this.gameClearArea, (mighty) => {
             if(this.gameClear == false){ //Play "Game Clear Sound Once"
@@ -112,7 +111,7 @@ class Play extends Phaser.Scene {
             this.gameClear = true;
             mighty.complete = true;
         });
-        this.physics.add.overlap(this.gummyGroup, this.mighty, (gummy, mighty) => {
+        this.physics.add.overlap(this.gummyGroup, this.mighty, (gummy, mighty) => { //Mighty consuming gummies
             this.sound.play("eat");
             gummy.destroy();
             mighty.speed += 1;
@@ -165,7 +164,7 @@ class Play extends Phaser.Scene {
         this.physics.add.collider(this.greenGroup, this.bugsterBarriers, (green) => {
             green.reverse();
         });
-        this.scaffoldingGroup.children.each((scaffold) => { //Attempting to enable collision between Mighty and Scaffolding group (NOT WORKING)
+        this.scaffoldingGroup.children.each((scaffold) => {
             this.physics.add.existing(scaffold);
             scaffold.body.setImmovable(true);
             scaffold.body.checkCollision.down = false;
@@ -173,8 +172,6 @@ class Play extends Phaser.Scene {
             scaffold.body.checkCollision.right = false;
             this.physics.add.collider(this.mighty, scaffold);
         });
-        //gameObject.body.blocked.top/bottom/left/right
-        //gameObject.body.touching
         this.orangeGroup.children.each((child) => {
             this.physics.add.collider(child, terrainLayer);
             this.physics.add.collider(child, this.scaffoldingGroup);
