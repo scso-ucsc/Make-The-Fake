@@ -7,7 +7,6 @@ class Mighty extends Phaser.Physics.Arcade.Sprite {
         this.parentScene.physics.add.existing(this); //Adding physics to Mighty in this scene
 
         this.setCollideWorldBounds(true); //Enabling collision with world bounds
-        //this.setImmovable(true);
 
         //Mighty's properties
         this.health = 10;
@@ -136,6 +135,7 @@ class RunState extends State {
 
 class AttackState extends State{
     enter(scene, mighty){
+        mighty.immune = true;
         mighty.setSize(mighty.width / 1.1, mighty.height / 1.8); //BUG THAT ENABLES CLIP THROUGH OF TERRAIN
         scene.sound.play("attack");
         mighty.isAttacking = true;
@@ -146,10 +146,12 @@ class AttackState extends State{
             mighty.setSize(mighty.width / 1.5, mighty.height / 1.8); //Returning bounds
             if(mighty.body.touching.down == true || mighty.body.blocked.down == true){ 
                 mighty.body.setSize(mighty.width / 1.5, mighty.height / 1.8);
+                mighty.immune = false;
                 this.stateMachine.transition("idle");
                 return;
             } else{
                 mighty.body.setSize(mighty.width / 1.5, mighty.height / 1.8);
+                mighty.immune = false;
                 this.stateMachine.transition("fall");
                 return;
             }
