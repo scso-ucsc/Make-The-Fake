@@ -55,7 +55,7 @@ class IdleState extends State {
             return;
         }
 
-        //Transition to hurt if h is pressed for TESTING
+        //Transition to hurt if colliding with enemy
         if(mighty.immune == true){
             this.stateMachine.transition("hurt");
             return;
@@ -92,7 +92,7 @@ class RunState extends State {
             return;
         }
 
-        //Transition to hurt if h is pressed for TESTING
+        //Transition to hurt if colliding with enemy
         if(mighty.immune == true){
             this.stateMachine.transition("hurt");
             return;
@@ -135,6 +135,7 @@ class RunState extends State {
 
 class AttackState extends State{
     enter(scene, mighty){
+        mighty.setVelocityX(0);
         mighty.immune = true;
         mighty.setSize(mighty.width / 1.1, mighty.height / 1.8); //BUG THAT ENABLES CLIP THROUGH OF TERRAIN
         scene.sound.play("attack");
@@ -160,6 +161,7 @@ class AttackState extends State{
     
     execute(scene, mighty){
         const { left, right } = scene.keys;
+        mighty.isAttacking = true;
 
         //Executing Movement
         if(left.isDown) {
@@ -268,9 +270,9 @@ class HurtState extends State{
     enter(scene, mighty){
         scene.sound.play("mightyHurt");
         mighty.health -= 1;
-        mighty.setVelocity(0);
+        mighty.setVelocity(0); //Stun Mighty for a bit
         mighty.anims.play(`hurt-${mighty.direction}`);
-        scene.time.delayedCall(mighty.hurtTimer, () => {
+        scene.time.delayedCall(mighty.hurtTimer, () => { //Transition back to idle or fall
             mighty.immune = false;
             if(mighty.body.touching.down == true || mighty.body.blocked.down == true){
                 this.stateMachine.transition("idle");
@@ -285,7 +287,7 @@ class HurtState extends State{
 
 class CompleteState extends State{
     enter(scene, mighty){
-        mighty.setCollideWorldBounds(false);
+        mighty.setCollideWorldBounds(false); //Enabling Mighty to run off the screen
         mighty.setVelocityX(mighty.speed / 4 * 3);
         mighty.anims.play(`run-${mighty.direction}`, true);
     }

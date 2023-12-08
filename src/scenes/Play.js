@@ -18,15 +18,28 @@ class Play extends Phaser.Scene {
 
         //Adding Background
         this.background = this.add.tileSprite(0, 0, 11200, 900, "playBackground").setOrigin(0, 0);
-        //Adding TileMap
-        const map = this.add.tilemap("tilemapJSON");
+        const map = this.add.tilemap("tilemapJSON"); //Adding TileMap
         const tileset = map.addTilesetImage("tileset", "tilesetImage"); //Connecting image to the data; "tileset" was the original name of the file
         const instructionsTileset = map.addTilesetImage("instructions", "instructions");
-        //Creating Terrain and Background Layers
-        const backgroundLayer = map.createLayer("Background", [tileset, instructionsTileset], 0, 0);
+        const backgroundLayer = map.createLayer("Background", [tileset, instructionsTileset], 0, 0); //Creating Terrain and Background Layers
         const terrainLayer = map.createLayer("Terrain", tileset, 0, 0);
         let scaffoldingLayer = map.getObjectLayer("Scaffold");
         let gummyLayer = map.getObjectLayer("Gummies");
+        this.scaffoldingGroup = this.physics.add.group(); //Creating Scaffolding Layer
+        this.scaffolding = map.createFromObjects("Scaffold", {
+            key: "tileset",
+            frame: 2
+        });
+        this.physics.world.enable(this.scaffolding, Phaser.Physics.Arcade.ArcadeBodyCollision); //Adding physics to scaffolding
+        this.scaffolding.forEach((scaffold) => {
+            this.scaffoldingGroup.add(scaffold);
+        });
+        this.blockGroup = this.add.group(); //Creating Block Layer
+        for(let i = 1; i <= 9; i++){
+            let blockSpawn = map.findObject("BlockSpawn", obj => obj.name === "block" + i.toString());
+            this.block = new Block(this, blockSpawn.x, blockSpawn.y - 25, "blockTile");
+            this.blockGroup.add(this.block);
+        };
 
         //Creating Bugster Barriers
         this.bugsterBarriers = map.createFromObjects("BugsterBarrier");
@@ -37,25 +50,6 @@ class Play extends Phaser.Scene {
         this.gameClearArea = map.createFromObjects("CompleteArea");
         this.gameClearArea.map((tile) => {tile.setAlpha(0)});
         this.physics.world.enable(this.gameClearArea, Phaser.Physics.Arcade.STATIC_BODY);
-
-        //Creating Scaffolding Layer
-        this.scaffoldingGroup = this.physics.add.group();
-        this.scaffolding = map.createFromObjects("Scaffold", {
-            key: "tileset",
-            frame: 2
-        });
-        this.physics.world.enable(this.scaffolding, Phaser.Physics.Arcade.ArcadeBodyCollision); //Adding physics to scaffolding
-        this.scaffolding.forEach((scaffold) => {
-            this.scaffoldingGroup.add(scaffold);
-        });
-
-        //Creating Block Layer
-        this.blockGroup = this.add.group();
-        for(let i = 1; i <= 9; i++){
-            let blockSpawn = map.findObject("BlockSpawn", obj => obj.name === "block" + i.toString());
-            this.block = new Block(this, blockSpawn.x, blockSpawn.y - 25, "blockTile");
-            this.blockGroup.add(this.block);
-        };
 
         //Creating Gummy Group
         this.gummies = map.createFromObjects("Gummies", {
@@ -71,8 +65,8 @@ class Play extends Phaser.Scene {
         const mightySpawn = map.findObject("MightySpawn", obj => obj.name === "spawnpoint");
         this.mighty = new Mighty(this, mightySpawn.x, mightySpawn.y, "mighty", 0, "right"); //Adding Mighty
 
-        //Spawning Orange Bugsters
-        this.orangeGroup = this.add.group({
+        //Spawning Bugsters
+        this.orangeGroup = this.add.group({ //Orange Bugsters
             runChildUpdate: true
         });
         for(let i = 1; i <= 6; i++){
@@ -80,8 +74,7 @@ class Play extends Phaser.Scene {
             this.orange = new BugsterOrange(this, orangeSpawn.x, orangeSpawn.y, "bugsterOrange", 0, "left");
             this.orangeGroup.add(this.orange);
         }
-        //Spawning Yellow Bugsters
-        this.yellowGroup = this.add.group({
+        this.yellowGroup = this.add.group({ //Yellow Bugsters
             runChildUpdate: true
         });
         for(let i = 1; i <= 3; i++){
@@ -89,8 +82,7 @@ class Play extends Phaser.Scene {
             this.yellow = new BugsterYellow(this, yellowSpawn.x, yellowSpawn.y, "bugsterYellow", 0, "left");
             this.yellowGroup.add(this.yellow);
         }
-        //Spawning Green Bugsters
-        this.greenGroup = this.add.group({
+        this.greenGroup = this.add.group({ //Green Bugsters
             runChildUpdate: true
         });
         for(let i = 1; i <= 9; i++){
@@ -117,7 +109,7 @@ class Play extends Phaser.Scene {
             mighty.speed += 1;
             this.gummyCount += 1;
         });
-        this.physics.add.overlap(this.mighty, this.orangeGroup, (mighty, orange) => { //Mighty and Orange Bugsters Interaction
+        this.physics.add.overlap(this.mighty, this.orangeGroup, (mighty, orange) => { //Mighty and Orange Bugsters Interactions
             if(mighty.isAttacking == true){
                 let hitParticles = this.add.sprite(orange.x, orange.y, "hitParticles", 0).anims.play("hitParticles-play");
                 hitParticles.once("animationcomplete", () => hitParticles.destroy());
@@ -134,7 +126,7 @@ class Play extends Phaser.Scene {
                 return;
             };
         });
-        this.physics.add.overlap(this.mighty, this.yellowGroup, (mighty, yellow) => { //Mighty and Yellow Bugsters Interaction
+        this.physics.add.overlap(this.mighty, this.yellowGroup, (mighty, yellow) => { //Mighty and Yellow Bugsters Interactions
             if(mighty.isAttacking == true && yellow.immune == false){
                 let hitParticles = this.add.sprite(yellow.x, yellow.y, "hitParticles", 0).anims.play("hitParticles-play");
                 hitParticles.once("animationcomplete", () => hitParticles.destroy());
@@ -150,7 +142,7 @@ class Play extends Phaser.Scene {
                 return;
             };
         });
-        this.physics.add.overlap(this.mighty, this.greenGroup, (mighty, green) => { //Mighty and Green Bugsters Interaction
+        this.physics.add.overlap(this.mighty, this.greenGroup, (mighty, green) => { //Mighty and Green Bugsters Interactions
             if(mighty.isAttacking == true){
                 let hitParticles = this.add.sprite(green.x, green.y, "hitParticles", 0).anims.play("hitParticles-play");
                 hitParticles.once("animationcomplete", () => hitParticles.destroy());
@@ -167,7 +159,7 @@ class Play extends Phaser.Scene {
                 return;
             };
         });
-        this.physics.add.collider(this.orangeGroup, this.bugsterBarriers, (orange) => {
+        this.physics.add.collider(this.orangeGroup, this.bugsterBarriers, (orange) => { //Bugsters and Collide Areas
             orange.flip();
         });
         this.physics.add.collider(this.yellowGroup, this.bugsterBarriers, (yellow) => {
@@ -176,7 +168,7 @@ class Play extends Phaser.Scene {
         this.physics.add.collider(this.greenGroup, this.bugsterBarriers, (green) => {
             green.reverse();
         });
-        this.scaffoldingGroup.children.each((scaffold) => {
+        this.scaffoldingGroup.children.each((scaffold) => { //Scafolding Interactions with Mighty and Bugsters
             this.physics.add.existing(scaffold);
             scaffold.body.setImmovable(true);
             scaffold.body.checkCollision.down = false;
@@ -196,7 +188,7 @@ class Play extends Phaser.Scene {
             this.physics.add.collider(child, terrainLayer);
             this.physics.add.collider(child, this.scaffoldingGroup);
         });
-        this.physics.add.collider(this.mighty, this.blockGroup, (mighty, block) =>{
+        this.physics.add.collider(this.mighty, this.blockGroup, (mighty, block) =>{ //Mighty interaction with breakable blocks
             if(mighty.isAttacking == true){
                 block.break();
             }
@@ -222,13 +214,13 @@ class Play extends Phaser.Scene {
         this.timedEvent = this.time.delayedCall(6000000); //For tracking how much time has passed by
         this.gummyIcon = this.add.sprite(10, 50, "gummy").setScale(0.6).setOrigin(0); //Gummy Count
         this.gummyIcon.setScrollFactor(0);
-        this.gummyText = this.add.bitmapText(70, 70, "PressStart", this.gummyCount, 20).setOrigin(0).setTint(0xDDB1D5); //Gummy Count
+        this.gummyText = this.add.bitmapText(70, 70, "PressStart", this.gummyCount, 20).setOrigin(0).setTint(0xDDB1D5); //Gummy Count Text
         this.gummyText.setScrollFactor(0);
         
-        //GAME Clear Features
+        //GAME Clear UI Features
         this.gameClearTitle = this.add.sprite(400, 200, "gameClearTitle").setScale(0.25).setOrigin(0.5, 1).setScrollFactor(0).setAlpha(0);
         this.blackOverlay = this.add.rectangle(0, 0, map.widthInPixels, map.heightInPixels, 0x000000).setOrigin(0).setAlpha(0); //Enabling black box for overlay
-        //Paused Features
+        //Paused UI Features
         this.pausedText = this.add.bitmapText(400, 150, "PressStart", "GAME PAUSED", 50).setOrigin(0.5).setTint(0xDA6AA2).setAlpha(0).setScrollFactor(0);
         let questionConfig = {
             fontFamily: "Verdana",
@@ -247,7 +239,7 @@ class Play extends Phaser.Scene {
         };
         this.yesText = this.add.text(300, 300, "YES", textConfig).setOrigin(0.5).setScrollFactor(0).setScale(1).setAlpha(0);
         this.noText = this.add.text(500, 300, "NO", textConfig).setOrigin(0.5).setScrollFactor(0).setScale(0.85).setAlpha(0);
-        //GAME OVER Features
+        //GAME OVER UI Features
         this.gameOverText = this.add.bitmapText(400, 150, "PressStart", "GAME OVER", 50).setOrigin(0.5).setTint(0xDA6AA2).setAlpha(0).setScrollFactor(0);
         this.gameOverQuestion = this.add.text(400, 225, "RESTART?", questionConfig).setOrigin(0.5).setAlpha(0).setScrollFactor(0);
 
@@ -257,17 +249,17 @@ class Play extends Phaser.Scene {
 
     update(){
         if(!this.gameClear && !this.gameOver && !this.gamePaused){
-            //Pause game if ESC pressed
-            if(Phaser.Input.Keyboard.JustDown(keyESC)){
+            if(Phaser.Input.Keyboard.JustDown(keyESC)){ //Pause game if ESC pressed
                 this.gamePaused = true;
             };
-            //End Game if Mighty Runs out of Health
-            if(this.mighty.health == 0){
+            if(this.mighty.health == 0){ //End Game if Mighty Runs out of Health
                 this.sound.play("gameOverSound");
                 this.gameOver = true;
             };
+
             //Updating Healthbar based on Mighty's current health
             this.healthBar.setTexture("healthBar", this.mighty.health);
+
             //Updating Time; Inspired by this formula: https://stackoverflow.com/questions/63870145/phaser-3-create-a-game-clock-with-minutes-and-seconds
             let minuteExtraZero = "0";
             let secondExtraZero = "0";
@@ -282,15 +274,17 @@ class Play extends Phaser.Scene {
             }
             this.timeClock.text = minuteExtraZero + minuteVal.toString() + ":" + secondExtraZero + secondVal.toString();
             totalTime = this.timeClock.text; //For Score
+            
             //Updating Gummy Count
             this.gummyText.text = this.gummyCount;
+            
             //Updating Mighty
             this.mightyFSM.step();
         } else if(this.gamePaused){ //Display Paused UI if game is paused
             this.blackOverlay.setAlpha(0.8);
             this.pausedText.setAlpha(1);
             this.pausedQuestion.setAlpha(1);
-            if(this.pauseChoice == "yes"){
+            if(this.pauseChoice == "yes"){ //Deciding Player Choice
                 this.yesText.setAlpha(1).setScale(1);
                 this.noText.setAlpha(0.5).setScale(0.85);
                 if(Phaser.Input.Keyboard.JustDown(this.keys.right)){
@@ -322,7 +316,7 @@ class Play extends Phaser.Scene {
             this.blackOverlay.setAlpha(0.8);
             this.gameOverText.setAlpha(1);
             this.gameOverQuestion.setAlpha(1);
-            if(this.pauseChoice == "yes"){
+            if(this.pauseChoice == "yes"){ //Deciding Player Choice
                 this.yesText.setAlpha(1).setScale(1);
                 this.noText.setAlpha(0.5).setScale(0.85);
                 if(Phaser.Input.Keyboard.JustDown(this.keys.right)){
@@ -346,7 +340,7 @@ class Play extends Phaser.Scene {
                 }
             }
 
-        } else if(this.gameClear){
+        } else if(this.gameClear){ //Ending Game
             gummiesCollected = this.gummyCount;
             this.mightyFSM.step();
             this.gameClearTitle.setAlpha(1);

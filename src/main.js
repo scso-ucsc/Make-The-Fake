@@ -15,13 +15,12 @@ let config = {
     pixelArt: true,
     scene: [ Load, Menu, Play, Score, Credits ], //Defining scenes
     scale: {
-        //mode: Phaser.Scale.FIT,
         //autoCenter: Phaser.Scale.HORIZONTALLY,
     },
     physics: {
         default: "arcade",
         arcade: {
-            debug: "true" //For testing
+            //debug: "true" //For testing
         }
     }
 };
