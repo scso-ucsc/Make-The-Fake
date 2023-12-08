@@ -44,7 +44,7 @@ class BugsterYellow extends Phaser.Physics.Arcade.Sprite{
         }
     }
 
-    hit(){
+    hit(mightyDirection){
         this.life -= 1;
         this.immune = true;
         if(this.life == 0){
@@ -52,12 +52,12 @@ class BugsterYellow extends Phaser.Physics.Arcade.Sprite{
             enemiesDefeated += 1;
         } else{
             this.scene.time.delayedCall(500, () => {this.immune = false});
-            switch(this.direction){
+            switch(mightyDirection){
                 case "left":
-                    this.setVelocityX(this.velocity);
+                    this.setVelocityX(-this.velocity);
                     break;
                 case "right":
-                    this.setVelocityX(-this.velocity);
+                    this.setVelocityX(this.velocity);
                     break;
             }
         }

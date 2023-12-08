@@ -119,6 +119,10 @@ class Play extends Phaser.Scene {
         });
         this.physics.add.overlap(this.mighty, this.orangeGroup, (mighty, orange) => { //Mighty and Orange Bugsters Interaction
             if(mighty.isAttacking == true){
+                let hitParticles = this.add.sprite(orange.x, orange.y, "hitParticles", 0).anims.play("hitParticles-play");
+                hitParticles.once("animationcomplete", () => hitParticles.destroy());
+                let hitIcon = this.add.sprite(orange.x, orange.y, "hitIcon", 0);
+                this.time.delayedCall(1000, () => {hitIcon.destroy()});
                 var orangeRandomVal = Phaser.Math.Between(1, 3);
                 this.sound.play("bugsterHurt" + orangeRandomVal);
                 orange.destroy();
@@ -132,9 +136,13 @@ class Play extends Phaser.Scene {
         });
         this.physics.add.overlap(this.mighty, this.yellowGroup, (mighty, yellow) => { //Mighty and Yellow Bugsters Interaction
             if(mighty.isAttacking == true && yellow.immune == false){
+                let hitParticles = this.add.sprite(yellow.x, yellow.y, "hitParticles", 0).anims.play("hitParticles-play");
+                hitParticles.once("animationcomplete", () => hitParticles.destroy());
+                let hitIcon = this.add.sprite(yellow.x, yellow.y, "hitIcon", 0);
+                this.time.delayedCall(1000, () => {hitIcon.destroy()});
                 var yellowRandomVal = Phaser.Math.Between(1, 3);
                 this.sound.play("bugsterHurt" + yellowRandomVal);
-                yellow.hit();
+                yellow.hit(mighty.direction);
                 return;
             }
             if(mighty.immune == false){
@@ -144,6 +152,10 @@ class Play extends Phaser.Scene {
         });
         this.physics.add.overlap(this.mighty, this.greenGroup, (mighty, green) => { //Mighty and Green Bugsters Interaction
             if(mighty.isAttacking == true){
+                let hitParticles = this.add.sprite(green.x, green.y, "hitParticles", 0).anims.play("hitParticles-play");
+                hitParticles.once("animationcomplete", () => hitParticles.destroy());
+                let hitIcon = this.add.sprite(green.x, green.y, "hitIcon", 0);
+                this.time.delayedCall(1000, () => {hitIcon.destroy()});
                 var greenRandomVal = Phaser.Math.Between(1, 3);
                 this.sound.play("bugsterHurt" + greenRandomVal);
                 green.destroy();

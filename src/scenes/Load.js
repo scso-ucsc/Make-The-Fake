@@ -20,9 +20,10 @@ class Load extends Phaser.Scene {
         this.load.image("menuBackground", "./assets/menuBackground.jpg");
         this.load.image("playBackground", "./assets/playBackground.jpg")
         this.load.image("menuTitle", "./assets/menuTitle.png");
-        this.load.image("gameClearTitle", "./assets/gameClearText.png")
+        this.load.image("gameClearTitle", "./assets/gameClearText.png");
         this.load.image("gummy", "./assets/gummy.png");
-        this.load.image("blockTile", "./assets/blockTile.png")
+        this.load.image("blockTile", "./assets/blockTile.png");
+        this.load.image("hitIcon", "./assets/hitIcon.png");
         this.load.spritesheet("tileset", "./assets/tileset.png", {
             frameWidth: 100,
             frameHeight: 100
@@ -52,6 +53,10 @@ class Load extends Phaser.Scene {
         this.load.spritesheet("box", "./assets/box.png", { //Loading breakable box
             frameWidth: 150,
             frameHeight: 150
+        });
+        this.load.spritesheet("hitParticles", "./assets/hitParticles.png", { //Loading hit particles
+            frameWidth: 100,
+            frameHeight: 100
         })
 
         //Loading TileMap
@@ -195,6 +200,12 @@ class Load extends Phaser.Scene {
             frameRate: 8,
             repeat: 0,
             frames: this.anims.generateFrameNumbers("box", {start: 1, end: 5})
+        })
+        this.anims.create({
+            key: "hitParticles-play",
+            frameRate: 8,
+            repeat: 0,
+            frames: this.anims.generateFrameNumbers("hitParticles", {start: 0, end: 5})
         })
 
         //Controls Text

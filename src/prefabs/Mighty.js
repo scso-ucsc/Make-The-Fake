@@ -82,10 +82,6 @@ class IdleState extends State {
     }
 }
 
-//Make collider: mighty, scaffolding group
-//Fall check velocity.y > 0
-//To jump, check it tocuhing or if blocked.down
-
 class RunState extends State {
     execute(scene, mighty){
         const { left, right, space} = scene.keys;
