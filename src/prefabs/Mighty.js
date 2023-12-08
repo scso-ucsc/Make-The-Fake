@@ -13,7 +13,7 @@ class Mighty extends Phaser.Physics.Arcade.Sprite {
         this.direction = direction;
         this.speed = 250;
         this.gravity = 300
-        this.hurtTimer = 1250; //In ms
+        this.hurtTimer = 1500; //In ms
         this.setGravityY(this.gravity); //Applying gravity
         this.body.setSize(this.width / 1.5, this.height / 1.8);
         this.immune = false;
@@ -274,8 +274,10 @@ class HurtState extends State{
             mighty.immune = false;
             if(mighty.body.touching.down == true || mighty.body.blocked.down == true){
                 this.stateMachine.transition("idle");
+                return;
             } else{
                 this.stateMachine.transition("fall");
+                return;
             }
         });
     }
