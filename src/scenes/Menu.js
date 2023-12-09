@@ -82,8 +82,8 @@ class Menu extends Phaser.Scene {
     }
 
     update(){
-        // this.sound.stopAll();
-        // this.scene.start("playScene") //FOR TESTING
+        this.sound.stopAll();
+        this.scene.start("playScene") //FOR TESTING
         // this.scene.start("creditsScene") //FOR TESTING
 
         if(this.playerChoice == "play"){

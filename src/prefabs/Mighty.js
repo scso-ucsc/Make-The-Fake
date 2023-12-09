@@ -136,22 +136,30 @@ class RunState extends State {
 class AttackState extends State{
     enter(scene, mighty){
         mighty.setVelocityX(0);
-        mighty.immune = true;
-        mighty.setSize(mighty.width / 1.1, mighty.height / 1.8); //BUG THAT ENABLES CLIP THROUGH OF TERRAIN
+        // mighty.immune = true;
+        // mighty.setSize(mighty.width / 1.1, mighty.height / 1.8); //BUG THAT ENABLES CLIP THROUGH OF TERRAIN //ATTEMPT TO ADD EXTRA HIT BOX
         scene.sound.play("attack");
         mighty.isAttacking = true;
-        mighty.setVelocityX(0);
         mighty.anims.play(`attack-${mighty.direction}`, true);
+
+        //Transition to hurt if colliding with enemy
+        if(mighty.immune == true){
+            scene.mightyAttackBox.x = 0;
+            scene.mightyAttackBox.y = 0;
+            this.stateMachine.transition("hurt");
+            return;
+        }
+        
+        //Transition to next state
         mighty.once("animationcomplete", () => {
+            scene.mightyAttackBox.x = 0;
+            scene.mightyAttackBox.y = 0;
             mighty.isAttacking = false;
-            mighty.setSize(mighty.width / 1.5, mighty.height / 1.8); //Returning bounds
             if(mighty.body.touching.down == true || mighty.body.blocked.down == true){ 
-                mighty.body.setSize(mighty.width / 1.5, mighty.height / 1.8);
                 mighty.immune = false;
                 this.stateMachine.transition("idle");
                 return;
             } else{
-                mighty.body.setSize(mighty.width / 1.5, mighty.height / 1.8);
                 mighty.immune = false;
                 this.stateMachine.transition("fall");
                 return;
@@ -161,7 +169,7 @@ class AttackState extends State{
     
     execute(scene, mighty){
         const { left, right } = scene.keys;
-        mighty.isAttacking = true;
+        //mighty.isAttacking = true;
 
         //Executing Movement
         if(left.isDown) {
@@ -172,6 +180,15 @@ class AttackState extends State{
             mighty.setVelocityX(mighty.speed / 4 * 3);
         } else{ //Neither left or right being pressed
             mighty.setVelocityX(0);
+        }
+
+        //Moving Mighty's Attack Box
+        if(mighty.direction == "right"){
+            scene.mightyAttackBox.x = mighty.x + 34;
+            scene.mightyAttackBox.y = mighty.y - 6;
+        } else { //mighty.direction == "left"
+            scene.mightyAttackBox.x = mighty.x - 34;
+            scene.mightyAttackBox.y = mighty.y - 6;
         }
     }
 }

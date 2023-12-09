@@ -61,9 +61,10 @@ class Play extends Phaser.Scene {
         })
         this.gummyGroup = this.add.group(this.gummies); //Adding made gummies into group
 
-        //Adding Mighty
+        //Adding Mighty & Attack Box
         const mightySpawn = map.findObject("MightySpawn", obj => obj.name === "spawnpoint");
         this.mighty = new Mighty(this, mightySpawn.x, mightySpawn.y, "mighty", 0, "right"); //Adding Mighty
+        this.mightyAttackBox = this.physics.add.sprite(this.mighty.x + 34, this.mighty.y - 6).setSize(30, 70);
 
         //Spawning Bugsters
         this.orangeGroup = this.add.group({ //Orange Bugsters
@@ -109,42 +110,49 @@ class Play extends Phaser.Scene {
             mighty.speed += 1;
             this.gummyCount += 1;
         });
-        this.physics.add.overlap(this.mighty, this.orangeGroup, (mighty, orange) => { //Mighty and Orange Bugsters Interactions
-            if(mighty.isAttacking == true){
-                let hitParticles = this.add.sprite(orange.x, orange.y, "hitParticles", 0).anims.play("hitParticles-play");
-                hitParticles.once("animationcomplete", () => hitParticles.destroy());
-                let hitIcon = this.add.sprite(orange.x, orange.y, "hitIcon", 0);
-                this.time.delayedCall(1000, () => {hitIcon.destroy()});
-                var orangeRandomVal = Phaser.Math.Between(1, 3);
-                this.sound.play("bugsterHurt" + orangeRandomVal);
-                orange.destroy();
-                enemiesDefeated += 1;
-                return;
-            }
+        this.physics.add.overlap(this.mighty, this.orangeGroup, (mighty) => { //Mighty hurt by Orange Bugsters
             if(mighty.immune == false){
                 mighty.immune = true;
                 return;
             };
         });
-        this.physics.add.overlap(this.mighty, this.yellowGroup, (mighty, yellow) => { //Mighty and Yellow Bugsters Interactions
-            if(mighty.isAttacking == true && yellow.immune == false){
+        this.physics.add.overlap(this.orangeGroup, this.mightyAttackBox, (orange) => { //Mighty attacking Orange Bugsters
+            let hitParticles = this.add.sprite(orange.x, orange.y, "hitParticles", 0).anims.play("hitParticles-play");
+            hitParticles.once("animationcomplete", () => hitParticles.destroy());
+            let hitIcon = this.add.sprite(orange.x, orange.y, "hitIcon", 0);
+            this.time.delayedCall(1000, () => {hitIcon.destroy()});
+            var orangeRandomVal = Phaser.Math.Between(1, 3);
+            this.sound.play("bugsterHurt" + orangeRandomVal);
+            orange.destroy();
+            enemiesDefeated += 1;
+            return;
+        });
+        this.physics.add.overlap(this.mighty, this.yellowGroup, (mighty) => { //Mighty hurt by Yellow Bugsters
+            if(mighty.immune == false){
+                mighty.immune = true;
+                return;
+            };
+        });
+        this.physics.add.overlap(this.yellowGroup, this.mightyAttackBox, (yellow) => { //Mighty attacking Yellow Bugsters
+            if(this.mighty.isAttacking == true && yellow.immune == false){
                 let hitParticles = this.add.sprite(yellow.x, yellow.y, "hitParticles", 0).anims.play("hitParticles-play");
                 hitParticles.once("animationcomplete", () => hitParticles.destroy());
                 let hitIcon = this.add.sprite(yellow.x, yellow.y, "hitIcon", 0);
                 this.time.delayedCall(1000, () => {hitIcon.destroy()});
                 var yellowRandomVal = Phaser.Math.Between(1, 3);
                 this.sound.play("bugsterHurt" + yellowRandomVal);
-                yellow.hit(mighty.direction);
+                yellow.hit(this.mighty.direction);
                 return;
             }
+        });
+        this.physics.add.overlap(this.mighty, this.greenGroup, (mighty) => { //Mighty hurt by Green Bugsters
             if(mighty.immune == false){
                 mighty.immune = true;
                 return;
             };
         });
-        this.physics.add.overlap(this.mighty, this.greenGroup, (mighty, green) => { //Mighty and Green Bugsters Interactions
-            if(mighty.isAttacking == true){
-                let hitParticles = this.add.sprite(green.x, green.y, "hitParticles", 0).anims.play("hitParticles-play");
+        this.physics.add.overlap(this.greenGroup, this.mightyAttackBox, (green) => { //Mighty attacking Green Bugsters
+            let hitParticles = this.add.sprite(green.x, green.y, "hitParticles", 0).anims.play("hitParticles-play");
                 hitParticles.once("animationcomplete", () => hitParticles.destroy());
                 let hitIcon = this.add.sprite(green.x, green.y, "hitIcon", 0);
                 this.time.delayedCall(1000, () => {hitIcon.destroy()});
@@ -153,11 +161,6 @@ class Play extends Phaser.Scene {
                 green.destroy();
                 enemiesDefeated += 1;
                 return;
-            }
-            if(mighty.immune == false){
-                mighty.immune = true;
-                return;
-            };
         });
         this.physics.add.collider(this.orangeGroup, this.bugsterBarriers, (orange) => { //Bugsters and Collide Areas
             orange.flip();
@@ -188,8 +191,9 @@ class Play extends Phaser.Scene {
             this.physics.add.collider(child, terrainLayer);
             this.physics.add.collider(child, this.scaffoldingGroup);
         });
-        this.physics.add.collider(this.mighty, this.blockGroup, (mighty, block) =>{ //Mighty interaction with breakable blocks
-            if(mighty.isAttacking == true){
+        this.physics.add.collider(this.mighty, this.blockGroup);
+        this.physics.add.collider(this.blockGroup, this.mightyAttackBox, (block) =>{ //Mighty Attack Box with breakable blocks
+            if(this.mighty.isAttacking == true){
                 block.break();
             }
         });
