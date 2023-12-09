@@ -15,7 +15,7 @@ class Mighty extends Phaser.Physics.Arcade.Sprite {
         this.gravity = 300
         this.hurtTimer = 1500; //In ms
         this.setGravityY(this.gravity); //Applying gravity
-        this.body.setSize(this.width / 1.5, this.height / 1.8);
+        this.body.setSize(this.width / 1.7, this.height / 1.8);
         this.immune = false;
         this.isAttacking = false;
         this.complete = false;
@@ -172,11 +172,9 @@ class AttackState extends State{
         //mighty.isAttacking = true;
 
         //Executing Movement
-        if(left.isDown) {
-            mighty.direction = "left";
+        if(left.isDown && mighty.direction == "left") {
             mighty.setVelocityX(-mighty.speed / 4 * 3);
-        } else if(right.isDown) {
-            mighty.direction = "right";
+        } else if(right.isDown && mighty.direction == "right") {
             mighty.setVelocityX(mighty.speed / 4 * 3);
         } else{ //Neither left or right being pressed
             mighty.setVelocityX(0);
