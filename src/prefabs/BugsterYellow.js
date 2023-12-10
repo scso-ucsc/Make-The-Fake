@@ -7,7 +7,6 @@ class BugsterYellow extends Phaser.Physics.Arcade.Sprite{
 
         //Setting Bugster Variables
         this.setCollideWorldBounds(true);
-        //this.setImmovable(true);
         this.direction = direction;
         this.velocity = 100;
         this.setGravityY(300);
@@ -20,7 +19,7 @@ class BugsterYellow extends Phaser.Physics.Arcade.Sprite{
         this.play(`yellowBugster-${this.direction}`);
     }
 
-    update(){
+    update(){ //Left and right movement
         if(this.scene.gamePaused == true){
             this.setVelocityX(0);
         } else{ //this.scene.gamePaused == false
@@ -34,7 +33,7 @@ class BugsterYellow extends Phaser.Physics.Arcade.Sprite{
         }
     }
 
-    flip(){
+    flip(){ //Changing direction of Bugster
         if(this.direction == "left"){
             this.direction = "right";
             this.play(`yellowBugster-${this.direction}`);
@@ -46,11 +45,11 @@ class BugsterYellow extends Phaser.Physics.Arcade.Sprite{
 
     hit(mightyDirection){
         this.life -= 1;
-        this.immune = true;
-        if(this.life == 0){
+        this.immune = true; //Temporarily make bugster immune so it is not destroyed within the same Mighty attack animation
+        if(this.life == 0){ //Destroy on second hit
             this.destroy();
             enemiesDefeated += 1;
-        } else{
+        } else{ //Knock back in the direction Mighty hit him if hit one time
             this.scene.time.delayedCall(500, () => {this.immune = false});
             switch(mightyDirection){
                 case "left":

@@ -5,7 +5,7 @@ class Score extends Phaser.Scene {
 
     create(){
         //Playing Audio
-        this.sound.play("creditsAudio")
+        this.sound.play("creditsAudio", audioConfig)
 
         //Variables
         this.nextSceneChoice = "menu";
@@ -92,6 +92,7 @@ class Score extends Phaser.Scene {
     }
 
     update(){
+        //Enabling player choice of either replaying the level or returning to menu
         if(this.nextSceneChoice == "menu"){
             this.menuText.setAlpha(1).setScale(1);
             this.replayText.setAlpha(0.5).setScale(0.85);

@@ -36,7 +36,7 @@ class Menu extends Phaser.Scene {
         this.transitionOverlay = this.add.rectangle(0, 0, canvasWidth, canvasHeight, 0x000000).setOrigin(0).setAlpha(0);
 
         //Title Tween
-        let titleTween = this.tweens.add({
+        this.tweens.add({
             targets: menuTitle,
             x: 0,
             y: 0,
@@ -45,7 +45,7 @@ class Menu extends Phaser.Scene {
         });
         this.sound.play("intro");
 
-        //Adding black overlay
+        //Adding black overlay and displaying player options
         this.time.delayedCall(1000, () => {
             this.tweens.add({
                 targets: blackOverlay,
@@ -82,16 +82,11 @@ class Menu extends Phaser.Scene {
     }
 
     update(){
-        this.sound.stopAll();
-        this.scene.start("playScene") //FOR TESTING
-        // this.scene.start("creditsScene") //FOR TESTING
-
-        if(this.playerChoice == "play"){
+        if(this.playerChoice == "play"){ //If player chooses "play", start game is SPACE is pressed, switch choice to "credits" if DOWN is pressed
             if(Phaser.Input.Keyboard.JustDown(keyDOWN)){
                 this.playerChoice = "credits";
                 this.sound.play("switch1")
-                //this.playTextOff.play();
-                this.tweens.add({
+                this.tweens.add({ //Text animations
                     targets: this.playText,
                     scaleX: 0.85,
                     scaleY: 0.85,
@@ -99,7 +94,6 @@ class Menu extends Phaser.Scene {
                     duration: 200,
                     ease: "Linear"
                 });
-                //this.creditsTextOn.play();
                 this.tweens.add({
                     targets: this.creditsText,
                     scaleX: 1,
@@ -111,7 +105,7 @@ class Menu extends Phaser.Scene {
             } else if(Phaser.Input.Keyboard.JustDown(keySPACE) && this.playSelected == false){
                 this.playSelected = true;
                 this.sound.play("select");
-                this.tweens.chain({
+                this.tweens.chain({ //Text animations
                     targets: this.playText,
                     loop: 1,
                     tweens: [
@@ -128,7 +122,7 @@ class Menu extends Phaser.Scene {
                             duration: 200
                         }
                     ],
-                    onComplete: () => {
+                    onComplete: () => { //Fade to black transition
                         this.tweens.add({
                             targets: this.transitionOverlay,
                             alpha: 1,
@@ -142,11 +136,10 @@ class Menu extends Phaser.Scene {
                 });
             }
         } else{ //this.playerChoice == "credits"
-            if(Phaser.Input.Keyboard.JustDown(keyUP)){
+            if(Phaser.Input.Keyboard.JustDown(keyUP)){ //If player chooses "credits", go to credits scene if SPACE is pressed, switch choice to "play" if UP is pressed
                 this.playerChoice = "play";
                 this.sound.play("switch1")
-                //this.playTextOn.play();
-                this.tweens.add({
+                this.tweens.add({ //Text animations
                     targets: this.playText,
                     scaleX: 1,
                     scaleY: 1,
@@ -154,7 +147,6 @@ class Menu extends Phaser.Scene {
                     duration: 200,
                     ease: "Linear"
                 });
-                //this.creditsTextOff.play();
                 this.tweens.add({
                     targets: this.creditsText,
                     scaleX: 0.85,
@@ -166,7 +158,7 @@ class Menu extends Phaser.Scene {
             } else if(Phaser.Input.Keyboard.JustDown(keySPACE) && this.playSelected == false){
                 this.playSelected = true;
                 this.sound.play("select");
-                this.tweens.chain({
+                this.tweens.chain({  //Text animations
                     targets: this.creditsText,
                     loop: 1,
                     tweens: [
@@ -183,8 +175,8 @@ class Menu extends Phaser.Scene {
                             duration: 200
                         }
                     ],
-                    onComplete: () => {
-                        this.tweens.add({
+                    onComplete: () => { 
+                        this.tweens.add({ //Fade to black transition
                             targets: this.transitionOverlay,
                             alpha: 1,
                             duration: 1000,

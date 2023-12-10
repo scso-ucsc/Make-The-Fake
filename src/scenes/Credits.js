@@ -44,7 +44,7 @@ class Credits extends Phaser.Scene {
     }
 
     update(){
-        if(Phaser.Input.Keyboard.JustDown(this.keys.space)){
+        if(Phaser.Input.Keyboard.JustDown(this.keys.space)){ //Return to menu
             this.sound.stopAll();
             this.scene.start("menuScene");
         }

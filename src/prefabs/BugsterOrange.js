@@ -7,7 +7,6 @@ class BugsterOrange extends Phaser.Physics.Arcade.Sprite{
 
         //Setting Bugster Variables
         this.setCollideWorldBounds(true);
-        //this.setImmovable(true);
         this.direction = direction;
         this.velocity = 100;
         this.setGravityY(300);
@@ -18,7 +17,7 @@ class BugsterOrange extends Phaser.Physics.Arcade.Sprite{
         this.play(`orangeBugster-${this.direction}`);
     }
 
-    update(){
+    update(){ //Left and right movement
         if(this.scene.gamePaused == true){
             this.setVelocityX(0);
         } else{ //this.scene.gamePaused == false
@@ -30,7 +29,7 @@ class BugsterOrange extends Phaser.Physics.Arcade.Sprite{
         }
     }
 
-    flip(){
+    flip(){ //Changing direction of Bugster
         if(this.direction == "left"){
             this.direction = "right";
             this.play(`orangeBugster-${this.direction}`);

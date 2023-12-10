@@ -7,7 +7,6 @@ class BugsterGreen extends Phaser.Physics.Arcade.Sprite{
 
         //Setting Bugster Variables
         this.setCollideWorldBounds(true);
-        //this.setImmovable(true);
         this.setGravityY(100);
         this.body.setSize(this.width / 1.5, this.height / 1.9);
         this.velocity = 100;
@@ -18,6 +17,7 @@ class BugsterGreen extends Phaser.Physics.Arcade.Sprite{
     }
 
     update(){
+        //Up and down movement
         if(this.scene.gamePaused == true){
             this.setVelocityY(0);
         } else{ //this.scene.gamePaused == false
@@ -29,7 +29,7 @@ class BugsterGreen extends Phaser.Physics.Arcade.Sprite{
         }
     }
 
-    reverse(){
+    reverse(){ //Changing direction of floating Bugster
         if(this.direction == "down"){
             this.direction = "up";
         } else{ //this.direction == "up"

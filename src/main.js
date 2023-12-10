@@ -3,7 +3,7 @@
 //From: Kamen Rider Ex-Aid (2016)
 //Genre: 2D Action Platform
 //Major Phaser Components Used: Cameras, Physics Systems, Text Objects, Tweens Manager, Tilemap, Animation Manager, Timers
-//Time Spent: 44 Hours
+//Time Spent: 45 Hours
 
 'use strict'
 
@@ -14,13 +14,10 @@ let config = {
     height: 450,
     pixelArt: true,
     scene: [ Load, Menu, Play, Score, Credits ], //Defining scenes
-    scale: {
-        //autoCenter: Phaser.Scale.HORIZONTALLY,
-    },
     physics: {
         default: "arcade",
         arcade: {
-            debug: "true" //For testing
+            //debug: "true" //For testing
         }
     }
 };

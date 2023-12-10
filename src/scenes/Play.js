@@ -66,7 +66,7 @@ class Play extends Phaser.Scene {
         this.mighty = new Mighty(this, mightySpawn.x, mightySpawn.y, "mighty", 0, "right"); //Adding Mighty
         this.mightyAttackBox = this.physics.add.sprite(this.mighty.x + 34, this.mighty.y - 6).setSize(30, 70);
 
-        //Spawning Bugsters
+        //Spawning Bugsters based on their spawn points from Tiled
         this.orangeGroup = this.add.group({ //Orange Bugsters
             runChildUpdate: true
         });
@@ -163,7 +163,7 @@ class Play extends Phaser.Scene {
                 return;
         });
         this.physics.add.collider(this.orangeGroup, this.bugsterBarriers, (orange) => { //Bugsters and Collide Areas
-            orange.flip();
+            orange.flip(); //Flip upon colliding with a design area
         });
         this.physics.add.collider(this.yellowGroup, this.bugsterBarriers, (yellow) => {
             yellow.flip();

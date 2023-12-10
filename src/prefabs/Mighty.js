@@ -98,6 +98,7 @@ class RunState extends State {
             return;
         }
 
+        //Transition to complete is Mighty reaches the end of the game
         if(mighty.complete == true){
             this.stateMachine.transition("complete");
             return;
@@ -136,8 +137,6 @@ class RunState extends State {
 class AttackState extends State{
     enter(scene, mighty){
         mighty.setVelocityX(0);
-        // mighty.immune = true;
-        // mighty.setSize(mighty.width / 1.1, mighty.height / 1.8); //BUG THAT ENABLES CLIP THROUGH OF TERRAIN //ATTEMPT TO ADD EXTRA HIT BOX
         scene.sound.play("attack");
         mighty.isAttacking = true;
         mighty.anims.play(`attack-${mighty.direction}`, true);
@@ -155,7 +154,7 @@ class AttackState extends State{
             scene.mightyAttackBox.x = 0;
             scene.mightyAttackBox.y = 0;
             mighty.isAttacking = false;
-            if(mighty.body.touching.down == true || mighty.body.blocked.down == true){ 
+            if(mighty.body.touching.down == true || mighty.body.blocked.down == true){
                 mighty.immune = false;
                 this.stateMachine.transition("idle");
                 return;
@@ -169,7 +168,6 @@ class AttackState extends State{
     
     execute(scene, mighty){
         const { left, right } = scene.keys;
-        //mighty.isAttacking = true;
 
         //Executing Movement
         if(left.isDown && mighty.direction == "left") {
@@ -180,7 +178,7 @@ class AttackState extends State{
             mighty.setVelocityX(0);
         }
 
-        //Moving Mighty's Attack Box
+        //Moving Mighty's Attack Box for Play scene's collision detection
         if(mighty.direction == "right"){
             scene.mightyAttackBox.x = mighty.x + 34;
             scene.mightyAttackBox.y = mighty.y - 6;
@@ -203,18 +201,21 @@ class JumpState extends State{
         const { left, right } = scene.keys;
         const keyR = scene.keys.keyR; //Bounding to enable R key
 
+        //Transition to attack if r is pressed
         if(Phaser.Input.Keyboard.JustDown(keyR)){
             mighty.setVelocityY(0);
             this.stateMachine.transition("attack");
             return;
         }
 
+        //Transition to hurt if colliding with enemy
         if(mighty.immune == true){
             mighty.setVelocityY(0);
             this.stateMachine.transition("hurt");
             return;
         }
 
+        //Transition to complete is Mighty reaches the end of the game
         if(mighty.complete == true){
             this.stateMachine.transition("complete");
             return;
@@ -250,13 +251,21 @@ class FallState extends State{
         const { left, right } = scene.keys;
         const keyR = scene.keys.keyR; //Bounding to enable R key
 
+        //Transition to hurt if colliding with enemy
         if(mighty.immune == true){
             this.stateMachine.transition("hurt");
             return;
         }
 
+        //Transition to attack if r is pressed
         if(Phaser.Input.Keyboard.JustDown(keyR)){
             this.stateMachine.transition("attack");
+            return;
+        }
+
+        //Transition to complete is Mighty reaches the end of the game
+        if(mighty.complete == true){
+            this.stateMachine.transition("complete");
             return;
         }
 

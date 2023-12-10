@@ -16,7 +16,7 @@ class Load extends Phaser.Scene {
             loadingBar.destroy();
         });
 
-        //Loading Sprites
+        //Loading Images and Sprites
         this.load.image("menuBackground", "./assets/menuBackground.jpg");
         this.load.image("playBackground", "./assets/playBackground.jpg")
         this.load.image("menuTitle", "./assets/menuTitle.png");
@@ -24,14 +24,6 @@ class Load extends Phaser.Scene {
         this.load.image("gummy", "./assets/gummy.png");
         this.load.image("blockTile", "./assets/blockTile.png");
         this.load.image("hitIcon", "./assets/hitIcon.png");
-        this.load.spritesheet("tileset", "./assets/tileset.png", {
-            frameWidth: 100,
-            frameHeight: 100
-        });
-        this.load.spritesheet("healthBar", "./assets/healthBar.png", {
-            frameWidth: 200,
-            frameHeight: 50
-        });
 
         //Loading Spritesheet Assets
         this.load.spritesheet("mighty", "./assets/mighty.png", { //Loading Mighty Spritesheet
@@ -57,7 +49,15 @@ class Load extends Phaser.Scene {
         this.load.spritesheet("hitParticles", "./assets/hitParticles.png", { //Loading hit particles
             frameWidth: 100,
             frameHeight: 100
-        })
+        });
+        this.load.spritesheet("tileset", "./assets/tileset.png", { //Tileset
+            frameWidth: 100,
+            frameHeight: 100
+        });
+        this.load.spritesheet("healthBar", "./assets/healthBar.png", { //Mighty's Healthbar
+            frameWidth: 200,
+            frameHeight: 50
+        });
 
         //Loading TileMap
         this.load.image("tilesetImage", "./assets/tileset.png"); //Loading tileset
@@ -211,6 +211,7 @@ class Load extends Phaser.Scene {
         //Controls Text
         document.getElementById('info').innerHTML = "<strong>CONTROLS:</strong> ARROWS | SPACE | R | ESC"
         
+        //Begin scene upon completion of load
         this.scene.start("menuScene");
     }
 }
